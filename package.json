@@ -1,0 +1,61 @@
+{
+  "name": "@halvaradop/obstackle",
+  "version": "0.1.0",
+  "description": "A collection of utility functions for working with objects in TypeScript.",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest --run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halvaradop/obstackle.git"
+  },
+  "keywords": [
+    "javascript",
+    "typescript",
+    "objects",
+    "utilities",
+    "tools",
+    "toolkit",
+    "functions",
+    "manipulation"
+  ],
+  "author": "Hernan Alvarado <hernanvid123@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://github.com/halvaradop/obstackle",
+  "bugs": {
+    "email": "hernanvid123@gmail.com",
+    "url": "https://github.com/halvaradop/obstackle/issues"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.1",
+    "vitest": "^3.0.6"
+  },
+  "files": [
+    "dist"
+  ],
+  "packageManager": "pnpm@10.3.0",
+  "prettier": {
+    "printWidth": 130,
+    "tabWidth": 4,
+    "semi": false,
+    "overrides": [
+      {
+        "files": [
+          "*.json",
+          "*.md",
+          "*.yml",
+          "*.yaml"
+        ],
+        "options": {
+          "tabWidth": 2
+        }
+      }
+    ]
+  }
+}
