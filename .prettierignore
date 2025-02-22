@@ -1,0 +1,9 @@
+# Artifacts
+node_modules
+dist
+.gitignore
+
+# Misc
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
