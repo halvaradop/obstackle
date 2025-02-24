@@ -8,11 +8,33 @@ import { isSimpleType } from "./utils.js"
  * @param {object} source - The first object to merge.
  * @param {object} target - The second object to merge.
  * @param {string} priority - The priority of the merge. It can be "source", "target", or "object".
+ * @param {boolean} nullish - If true, it will includes nullish values.
  * @returns The merged object.
  *
  * @example
- * // Expected: { a: 1, b: { c: 2, d: 3 }, c: 4 }
- * merge({ a: 1, b: { c: 2 } }, { b: { d: 3 }, c: 4 })
+ * // Expected:
+ * {
+ *   foo: 1,
+ *   bar: {
+ *     barfoo: 2,
+ *     foobar: 3
+ *   },
+ *   barfoo: 4
+ * }
+ *
+ * merge(
+ * {
+ *   foo: 1,
+ *   bar: {
+ *     barfoo: 2
+ *   }
+ * },
+ * {
+ *   bar: {
+ *     foobar: 3
+ *   },
+ *   barfoo: 4
+ * })
  */
 export const merge = <S extends Record<string, unknown>, T extends Record<string, unknown>>(
     source: S,
