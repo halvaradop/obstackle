@@ -1,5 +1,6 @@
-import { PrimitiveNullish } from "@halvaradop/ts-utility-types/types"
-import { isPrimitive, isNullish, isObject, isFunction, isArray } from "@halvaradop/ts-utility-types/validate"
+import { isObject, isArray } from "@halvaradop/ts-utility-types/validate"
+import { deepCopyArray } from "./deep-copy-array.js"
+import { isSimpleType } from "./utils.js"
 
 /**
  * Merges two objects in any depth recursively.
@@ -47,35 +48,4 @@ export const merge = <S extends Record<string, unknown>, T extends Record<string
         }
     }
     return clone
-}
-
-/**
- * Creates a deep copy of an array.
- *
- * @param {unknown[]} source - The source array to copy.
- * @returns {unknown[]} - The deep copied array.
- */
-const deepCopyArray = <Array extends unknown[]>(source: Array): Array => {
-    const clone: any = []
-    for (const key in source) {
-        if (isSimpleType(source[key], false)) {
-            clone[key] = source[key]
-        } else if (isObject(source[key])) {
-            clone[key] = merge({}, source[key] as any, "source", false)
-        } else if (isArray(source[key])) {
-            clone[key] = deepCopyArray(source[key])
-        }
-    }
-    return clone
-}
-
-/**
- * Checks whether a value is a simple type or nullish.
- *
- * @param {unknown} value - The value to check.
- * @param {boolean} nullish - Whether to consider null and undefined as simple types.
- * @returns {value is PrimitiveNullish} - Whether the value is a primitive or nullish.
- */
-const isSimpleType = (value: unknown, nullish: boolean): value is PrimitiveNullish => {
-    return isPrimitive(value) || (nullish && isNullish(value)) || isFunction(value)
 }
