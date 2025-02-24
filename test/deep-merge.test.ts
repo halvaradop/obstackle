@@ -412,6 +412,89 @@ describe("deep merge", () => {
             },
             priority: "target",
         },
+        {
+            description: "Merge arrays with source object having priority over target object",
+            source: {
+                foobar: [1, 2, 3, { foo: "bar" }],
+            },
+            target: {
+                foobar: [4, 5, 6, { bar: "foo" }],
+            },
+            expected: {
+                foobar: [1, 2, 3, { foo: "bar" }],
+            },
+            priority: "source",
+        },
+        {
+            description: "Merge arrays with target object having priority over source object",
+            source: {
+                foobar: [1, 2, 3, { foo: "bar" }],
+            },
+            target: {
+                foobar: [4, 5, 6, { bar: "foo" }],
+            },
+            expected: {
+                foobar: [4, 5, 6, { bar: "foo" }],
+            },
+            priority: "target",
+        },
+        {
+            description: "",
+            source: {
+                foo: {
+                    foobar: {
+                        foofoo: "barbar",
+                        barbar: {
+                            fiz: "buz",
+                            buz: [{ foo: "bar", bar: [1, 2] }],
+                        },
+                    },
+                    barfoo: {
+                        foo: "bar",
+                        bar: "foo",
+                        foofoo: [1, 2, 3],
+                    },
+                    barbar: [{ foo: "bar", bar: "foo", foofoo: [1, 2, 3] }],
+                },
+            },
+            target: {
+                foo: {
+                    foobar: {
+                        barbar: {
+                            buz: [{ fiz: "buz" }],
+                        },
+                    },
+                },
+                bar: {
+                    foo: "bar",
+                    bar: "foo",
+                    foofoo: [1, 2, 3],
+                },
+            },
+            expected: {
+                foo: {
+                    foobar: {
+                        foofoo: "barbar",
+                        barbar: {
+                            fiz: "buz",
+                            buz: [{ foo: "bar", bar: [1, 2] }],
+                        },
+                    },
+                    barfoo: {
+                        foo: "bar",
+                        bar: "foo",
+                        foofoo: [1, 2, 3],
+                    },
+                    barbar: [{ foo: "bar", bar: "foo", foofoo: [1, 2, 3] }],
+                },
+                bar: {
+                    foo: "bar",
+                    bar: "foo",
+                    foofoo: [1, 2, 3],
+                },
+            },
+            priority: "source",
+        },
     ]
 
     testCases.forEach(({ description, source, target, priority, expected }) => {

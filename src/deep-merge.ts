@@ -1,10 +1,7 @@
 import { PrimitiveNullish } from "@halvaradop/ts-utility-types/types"
-import { isPrimitive, isNullish, isObject, isFunction } from "@halvaradop/ts-utility-types/validate"
+import { isPrimitive, isNullish, isObject, isFunction, isArray } from "@halvaradop/ts-utility-types/validate"
 
 /**
- * @unstable
- * Doesn't support arrays yet.
- *
  * Merges two objects in any depth recursively.
  *
  * @param {object} source - The first object to merge.
@@ -34,6 +31,8 @@ export const merge = <S extends Record<string, unknown>, T extends Record<string
             } else {
                 clone[key] = merge((priorityTwo[key] ?? {}) as any, priorityOne[key] as any, priority, nullish)
             }
+        } else if (isArray(priorityOne[key])) {
+            clone[key] = deepCopyArray(priorityOne[key])
         }
     }
     for (const key in priorityTwo) {
@@ -42,7 +41,29 @@ export const merge = <S extends Record<string, unknown>, T extends Record<string
                 clone[key] = priorityTwo[key]
             } else if (isObject(priorityTwo[key])) {
                 clone[key] = merge({}, priorityTwo[key] as any, priority, nullish)
+            } else if (isArray(priorityTwo[key])) {
+                clone[key] = deepCopyArray(priorityTwo[key])
             }
+        }
+    }
+    return clone
+}
+
+/**
+ * Creates a deep copy of an array.
+ *
+ * @param {unknown[]} source - The source array to copy.
+ * @returns {unknown[]} - The deep copied array.
+ */
+const deepCopyArray = <Array extends unknown[]>(source: Array): Array => {
+    const clone: any = []
+    for (const key in source) {
+        if (isSimpleType(source[key], false)) {
+            clone[key] = source[key]
+        } else if (isObject(source[key])) {
+            clone[key] = merge({}, source[key] as any, "source", false)
+        } else if (isArray(source[key])) {
+            clone[key] = deepCopyArray(source[key])
         }
     }
     return clone
