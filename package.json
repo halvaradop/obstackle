@@ -32,7 +32,11 @@
     "email": "hernanvid123@gmail.com",
     "url": "https://github.com/halvaradop/obstackle/issues"
   },
+  "dependencies": {
+    "@halvaradop/ts-utility-types": "^0.17.0"
+  },
   "devDependencies": {
+    "@types/node": "^22.13.5",
     "prettier": "^3.5.1",
     "tsup": "^8.3.6",
     "typescript": "^5.7.3",
