@@ -1,5 +1,5 @@
 import { describe, test } from "vitest"
-import { merge } from "../src/deep-merge"
+import { deepMerge } from "../src/deep"
 
 interface TestCase {
     description: string
@@ -9,7 +9,7 @@ interface TestCase {
     priority: "source" | "target" | "object"
 }
 
-describe("deep merge", () => {
+describe("deepMerge", () => {
     const testCases: TestCase[] = [
         {
             description: "Source object has priority over target object",
@@ -499,7 +499,7 @@ describe("deep merge", () => {
 
     testCases.forEach(({ description, source, target, priority, expected }) => {
         test.concurrent(description, ({ expect }) => {
-            expect(merge(source, target, priority)).toEqual(expected)
+            expect(deepMerge(source, target, priority)).toEqual(expected)
         })
     })
 })
