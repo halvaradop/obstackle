@@ -1,5 +1,4 @@
 import { isObject, isArray } from "@halvaradop/ts-utility-types/validate"
-import { deepCopyArray } from "./deep-copy-array.js"
 import { isSimpleType } from "./utils.js"
 
 /**
@@ -12,9 +11,9 @@ import { isSimpleType } from "./utils.js"
  *
  * @example
  * // Expected: { a: 1, b: { c: 2, d: 3 }, c: 4 }
- * merge({ a: 1, b: { c: 2 } }, { b: { d: 3 }, c: 4 })
+ * deepMerge({ a: 1, b: { c: 2 } }, { b: { d: 3 }, c: 4 })
  */
-export const merge = <S extends Record<string, unknown>, T extends Record<string, unknown>>(
+export const deepMerge = <S extends Record<string, unknown>, T extends Record<string, unknown>>(
     source: S,
     target: T,
     priority: "source" | "target" | "object" = "source",
@@ -28,9 +27,9 @@ export const merge = <S extends Record<string, unknown>, T extends Record<string
             clone[key] = priorityOne[key]
         } else if (isObject(priorityOne[key])) {
             if (priority == "source") {
-                clone[key] = merge(priorityOne[key] as any, (priorityTwo[key] ?? {}) as any, priority, nullish)
+                clone[key] = deepMerge(priorityOne[key] as any, (priorityTwo[key] ?? {}) as any, priority, nullish)
             } else {
-                clone[key] = merge((priorityTwo[key] ?? {}) as any, priorityOne[key] as any, priority, nullish)
+                clone[key] = deepMerge((priorityTwo[key] ?? {}) as any, priorityOne[key] as any, priority, nullish)
             }
         } else if (isArray(priorityOne[key])) {
             clone[key] = deepCopyArray(priorityOne[key])
@@ -41,10 +40,30 @@ export const merge = <S extends Record<string, unknown>, T extends Record<string
             if (isSimpleType(priorityTwo[key], nullish)) {
                 clone[key] = priorityTwo[key]
             } else if (isObject(priorityTwo[key])) {
-                clone[key] = merge({}, priorityTwo[key] as any, priority, nullish)
+                clone[key] = deepMerge({}, priorityTwo[key] as any, priority, nullish)
             } else if (isArray(priorityTwo[key])) {
                 clone[key] = deepCopyArray(priorityTwo[key])
             }
+        }
+    }
+    return clone
+}
+
+/**
+ * Creates a deep copy of an array. It uses the `merge` function to copy objects and arrays.
+ *
+ * @param {unknown[]} source - The source array to copy.
+ * @returns {unknown[]} - The deep copied array.
+ */
+export const deepCopyArray = <Array extends unknown[]>(source: Array): Array => {
+    const clone: any = []
+    for (const key in source) {
+        if (isSimpleType(source[key], false)) {
+            clone[key] = source[key]
+        } else if (isObject(source[key])) {
+            clone[key] = deepMerge({}, source[key] as any, "source", false)
+        } else if (isArray(source[key])) {
+            clone[key] = deepCopyArray(source[key])
         }
     }
     return clone

@@ -45,6 +45,13 @@
   "files": [
     "dist"
   ],
+  "exports": {
+    "./deep": {
+      "types": "./dist/deep.d.ts",
+      "require": "./dist/deep.cjs",
+      "import": "./dist/deep.js"
+    }
+  },
   "packageManager": "pnpm@10.3.0",
   "prettier": {
     "printWidth": 130,
