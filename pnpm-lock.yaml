@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@halvaradop/ts-utility-types':
-        specifier: ^0.17.0
-        version: 0.17.0
+        specifier: ^0.18.0
+        version: 0.18.0
     devDependencies:
       '@types/node':
         specifier: ^22.13.5
@@ -180,8 +180,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@halvaradop/ts-utility-types@0.17.0':
-    resolution: {integrity: sha512-hEkBvjLjCHJhIN51ErlkfpgxJXgFa0YKI6HHShN7YSx8rVq/v6FprhCt94xNHhLNlvvSpyIWHO+j3U3+1Pj3TQ==}
+  '@halvaradop/ts-utility-types@0.18.0':
+    resolution: {integrity: sha512-cH6VbMQDYTkMSQ/7rCU+kxTy1W7Cr6fLwZTRurW3t7NnDFft5herISUn3W3C/w8ghoy0uwRrn32F2wsjSnWPqQ==}
 
   '@isaacs/cliui@8.0.2':
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
@@ -890,7 +890,7 @@ snapshots:
   '@esbuild/win32-x64@0.24.2':
     optional: true
 
-  '@halvaradop/ts-utility-types@0.17.0': {}
+  '@halvaradop/ts-utility-types@0.18.0': {}
 
   '@isaacs/cliui@8.0.2':
     dependencies:

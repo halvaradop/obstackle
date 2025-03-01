@@ -1,5 +1,6 @@
 import { isObject, isArray } from "@halvaradop/ts-utility-types/validate"
 import { isSimpleType } from "./utils.js"
+import { deepOmit } from "./omit.js"
 
 /**
  * Merges two objects in any depth recursively.
@@ -68,3 +69,5 @@ export const deepCopyArray = <Array extends unknown[]>(source: Array): Array => 
     }
     return clone
 }
+
+export { deepOmit }
