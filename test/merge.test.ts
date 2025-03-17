@@ -1,5 +1,6 @@
-import { describe, test } from "vitest"
+import { describe, expectTypeOf, test } from "vitest"
 import { deepMerge } from "../src/deep"
+import type { Merge as DeepMerge } from "@halvaradop/ts-utility-types"
 
 interface TestCase {
     description: string
@@ -501,5 +502,24 @@ describe("deepMerge", () => {
         test.concurrent(description, ({ expect }) => {
             expect(deepMerge(source, target, priority)).toEqual(expected)
         })
+    })
+
+    test("checks the return type", () => {
+        const source = {
+            foo: {
+                foofoo: {
+                    barfoo: "barfoo",
+                },
+            },
+        }
+        const target = {
+            foo: {
+                bar: {
+                    foobar: "foobar",
+                },
+            },
+        }
+        expectTypeOf(deepMerge(source, target)).toEqualTypeOf<DeepMerge<typeof source, typeof target>>()
+        expectTypeOf(deepMerge(source, target)).toEqualTypeOf<DeepMerge<typeof target, typeof source, false>>()
     })
 })

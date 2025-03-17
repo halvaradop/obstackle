@@ -1,6 +1,7 @@
 import { isObject, isArray } from "@halvaradop/ts-utility-types/validate"
 import { isSimpleType } from "./utils.js"
 import { deepOmit } from "./omit.js"
+import type { Merge as DeepMerge } from "@halvaradop/ts-utility-types/objects"
 
 /**
  * Merges two objects in any depth recursively.
@@ -14,12 +15,12 @@ import { deepOmit } from "./omit.js"
  * // Expected: { a: 1, b: { c: 2, d: 3 }, c: 4 }
  * deepMerge({ a: 1, b: { c: 2 } }, { b: { d: 3 }, c: 4 })
  */
-export const deepMerge = <S extends Record<string, unknown>, T extends Record<string, unknown>>(
-    source: S,
-    target: T,
+export const deepMerge = <Source extends Record<string, unknown>, Target extends Record<string, unknown>>(
+    source: Source,
+    target: Target,
     priority: "source" | "target" | "object" = "source",
     nullish: boolean = false,
-) => {
+): DeepMerge<Source, Target> => {
     const clone: any = {}
     const priorityOne = priority === "source" ? source : target
     const priorityTwo = priority === "source" ? target : source

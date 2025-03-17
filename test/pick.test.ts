@@ -1,4 +1,4 @@
-import { describe, test } from "vitest"
+import { describe, expectTypeOf, test } from "vitest"
 import { pick } from "../src/pick"
 
 describe("pick", () => {
@@ -89,5 +89,22 @@ describe("pick", () => {
         test.concurrent(description, ({ expect }) => {
             expect(pick(input, pickedKeys as keyof typeof input)).toEqual(expected)
         })
+    })
+
+    test("check the return type of pick", () => {
+        const user = {
+            username: "john_doe",
+            address: {
+                city: "New York",
+                country: "USA",
+            },
+            phone: {
+                home: "1234567890",
+                work: "0987654321",
+            },
+        }
+        expectTypeOf(pick(user, "username")).toEqualTypeOf<Pick<typeof user, "username">>()
+        expectTypeOf(pick(user, ["address"])).toEqualTypeOf<Pick<typeof user, "address">>()
+        expectTypeOf(pick(user, ["address", "phone"])).toEqualTypeOf<Pick<typeof user, "address" | "phone">>()
     })
 })
