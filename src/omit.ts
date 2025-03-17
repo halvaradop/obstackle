@@ -39,7 +39,7 @@ export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj
         }),
         {},
     )
-    return deep ? deepMerge(omitted, {}) : (omitted as Omit<Obj, ArgumentKeys<Keys>>)
+    return deep ? (deepMerge(omitted, {}) as Omit<Obj, ArgumentKeys<Keys>>) : (omitted as Omit<Obj, ArgumentKeys<Keys>>)
 }
 
 /**
