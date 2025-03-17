@@ -3,7 +3,6 @@
  *
  * @param {Record<string, unknown>} object - Object to pick from
  * @param {string | string[]} pick - Key or keys to pick from the object
- * @returns {Pick<Obj, Keys & string>} - Object with only the picked keys
  * @example
  *
  * const user = {
@@ -18,17 +17,13 @@
  * // Expected: { username: "john_doe" }
  * pick(user, "username")
  */
-export const pick = <Obj extends Record<string, unknown>, Keys extends keyof Obj | (keyof Obj)[]>(
-    object: Obj,
-    pick: Keys,
-): Pick<Obj, Keys & string> => {
+export const pick = <Obj extends Record<string, unknown>, Keys extends keyof Obj | (keyof Obj)[]>(object: Obj, pick: Keys) => {
     const keys = Array.isArray(pick) ? pick : [pick]
-    const picked = Object.keys(object).reduce(
+    return Object.keys(object).reduce(
         (previous, now) => ({
             ...previous,
             ...(keys.includes(now as Keys) ? { [now]: object[now] } : {}),
         }),
         {},
-    )
-    return picked as Pick<Obj, Keys & string>
+    ) as Pick<Obj, Extract<Keys extends unknown[] ? Keys[number] : Keys, keyof Obj>>
 }
