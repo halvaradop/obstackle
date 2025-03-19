@@ -1,5 +1,6 @@
-import { describe, test } from "vitest"
+import { describe, expectTypeOf, test } from "vitest"
 import { omit, deepOmit } from "../src/omit"
+import type { DeepOmit } from "@halvaradop/ts-utility-types/objects"
 
 interface TestCase {
     description: string
@@ -59,7 +60,7 @@ describe("omit", () => {
                 },
             },
             omit: "phone",
-            deep: true,
+            deep: false,
             expected: {
                 username: "john_doe",
                 address: {
@@ -121,6 +122,26 @@ describe("omit", () => {
             const actual = omit(input, omitKeys as keyof typeof input, deep)
             expect(actual).toEqual(expected)
         })
+    })
+
+    test("Checks return types of omit", () => {
+        const user = {
+            firstname: "john",
+            lastname: "doe",
+            username: "john_doe",
+            address: {
+                city: "New York",
+                country: "USA",
+            },
+            phone: {
+                home: "1234567890",
+                work: "0987654321",
+            },
+        }
+        expectTypeOf(omit(user, ["address", "phone"])).toEqualTypeOf<Omit<typeof user, "address" | "phone">>()
+        expectTypeOf(omit(user, ["address", "phone", "firstname", "username"])).toEqualTypeOf<
+            Omit<typeof user, "address" | "phone" | "firstname" | "username">
+        >()
     })
 })
 
@@ -302,5 +323,32 @@ describe("deepOmit", () => {
             const actual = deepOmit(input, omit)
             expect(actual).toEqual(expected)
         })
+    })
+
+    test("Checks return types of deepOmit", () => {
+        const user = {
+            username: "john_doe",
+            address: {
+                country: {
+                    name: "USA",
+                    code: "US",
+                    city: {
+                        name: "New York",
+                        code: "NY",
+                    },
+                },
+            },
+            phone: {
+                home: "1234567890",
+                work: "0987654321",
+            },
+        }
+        expectTypeOf(deepOmit(user, ["username", "phone.work"])).toEqualTypeOf<DeepOmit<typeof user, "username" | "phone.work">>()
+        expectTypeOf(deepOmit(user, ["username", "phone.work", "address.country.code"])).toEqualTypeOf<
+            DeepOmit<typeof user, "username" | "phone.work" | "address.country.code">
+        >()
+        expectTypeOf(
+            deepOmit(user, ["username", "phone.work", "address.country.code", "address.country.city.code"]),
+        ).toEqualTypeOf<DeepOmit<typeof user, "username" | "phone.work" | "address.country.code" | "address.country.city.code">>()
     })
 })

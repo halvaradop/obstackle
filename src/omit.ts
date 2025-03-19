@@ -1,5 +1,6 @@
 import { isArray, isObject } from "@halvaradop/ts-utility-types/validate"
-import { DeepKeys } from "@halvaradop/ts-utility-types"
+import type { DeepKeys, DeepOmit, LiteralUnion } from "@halvaradop/ts-utility-types/objects"
+import type { ArgumentKeys } from "./types.js"
 import { deepMerge } from "./deep.js"
 
 /**
@@ -8,7 +9,7 @@ import { deepMerge } from "./deep.js"
  * the omitted properties. The keys to be omitted are located in the first level of the object.
  *
  * @param {Record<string, unknown>} object - The object to omit properties.
- * @param {string | string[]} exclude - The key or keys to omit from the object.
+ * @param {string | string[]} omit - The key or keys to omit from the object.
  * @param {boolean} deep - if true returns a deep copy of the object otherwise a shallow copy.
  * @returns {Omit<Obj, Keys & keyof Obj>} - The object without the omitted properties.
  * @example
@@ -29,7 +30,7 @@ export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj
     object: Obj,
     omit: Keys,
     deep: boolean = false,
-): Omit<Obj, Keys & string> => {
+): Omit<Obj, ArgumentKeys<Keys>> => {
     const keys = isArray(omit) ? omit : [omit]
     const omitted = Object.keys(object).reduce(
         (previous, now) => ({
@@ -38,17 +39,20 @@ export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj
         }),
         {},
     )
-    return deep ? deepMerge(omitted, {}) : omitted
+    return deep ? (deepMerge(omitted, {}) as Omit<Obj, ArgumentKeys<Keys>>) : (omitted as Omit<Obj, ArgumentKeys<Keys>>)
 }
 
 /**
  * @internal
  */
-const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
+const internalDeepOmit = <
+    Obj extends Record<string, unknown>,
+    Keys extends LiteralUnion<DeepKeys<Obj> & string, string> | LiteralUnion<DeepKeys<Obj> & string, string>[],
+>(
     object: Obj,
     omit: Keys,
     path: string,
-) => {
+): DeepOmit<Obj, ArgumentKeys<Keys>> => {
     const omitKeys = isArray(omit) ? omit : [omit]
     const clone: any = {}
     for (const key in object) {
@@ -61,10 +65,14 @@ const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends Deep
             clone[key] = object[key]
         }
     }
-    return clone
+    return clone satisfies DeepOmit<Obj, ArgumentKeys<Keys>>
 }
 
 /**
+ * @unstable
+ * The returned type is not accurate. It should be fixed in the next release
+ * of @halvaradop/ts-utility-types
+ *
  * Omit properties from an object at any depth by the provided key or keys.
  * The keys to be omitted can be located at any depth within the object. The
  * keys provided should be concatenated with a dot to represent the path to
@@ -76,9 +84,12 @@ const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends Deep
  * @param {DeepKeys<object> | DeepKeys<object>[]} omit - The key or keys to omit from the object.
  * @returns {Omit<DeepKeys<Obj>, Keys & keyof Obj>} - The object without the omitted properties.
  */
-export const deepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
+export const deepOmit = <
+    Obj extends Record<string, unknown>,
+    Keys extends LiteralUnion<DeepKeys<Obj> & string, string> | LiteralUnion<DeepKeys<Obj> & string, string>[],
+>(
     object: Obj,
     omit: Keys,
-): Omit<Obj, keyof Obj> => {
-    return internalDeepOmit(object, omit, "")
+): DeepOmit<Obj, ArgumentKeys<Keys, string>> => {
+    return internalDeepOmit(object, omit, "") as DeepOmit<Obj, ArgumentKeys<Keys, string>>
 }
