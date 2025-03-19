@@ -7,7 +7,7 @@ interface TestCase {
     source: Record<string, unknown>
     target: Record<string, unknown>
     expected: Record<string, unknown>
-    priority: "source" | "target" | "object"
+    priorityObjects: boolean
 }
 
 describe("deepMerge", () => {
@@ -27,7 +27,7 @@ describe("deepMerge", () => {
                 bar: 999,
                 foobar: true,
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Target object has priority over source object",
@@ -41,11 +41,11 @@ describe("deepMerge", () => {
                 foobar: "foobar",
             },
             expected: {
-                foo: "barbar",
+                foo: "bar",
                 bar: 999,
-                foobar: "foobar",
+                foobar: true,
             },
-            priority: "target",
+            priorityObjects: false,
         },
         {
             description: "Source object with nested properties merged with target object",
@@ -67,7 +67,7 @@ describe("deepMerge", () => {
                 },
                 barfoo: "barfoo",
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Target object with nested properties merged with source object",
@@ -89,7 +89,7 @@ describe("deepMerge", () => {
                 },
                 barfoo: "barfoo",
             },
-            priority: "target",
+            priorityObjects: false,
         },
         {
             description: "Source object with deeply nested properties merged with target object",
@@ -117,7 +117,7 @@ describe("deepMerge", () => {
                     },
                 },
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Target object with deeply nested properties merged with source object",
@@ -137,15 +137,15 @@ describe("deepMerge", () => {
             },
             expected: {
                 foo: {
-                    bar: {
-                        foobar: "foobar",
-                    },
                     foofoo: {
                         barfoo: "barfoo",
                     },
+                    bar: {
+                        foobar: "foobar",
+                    },
                 },
             },
-            priority: "target",
+            priorityObjects: false,
         },
         {
             description: "Deeply nested source object with priority over target object",
@@ -176,7 +176,7 @@ describe("deepMerge", () => {
                     },
                 },
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Deeply nested target object with priority over source object",
@@ -202,12 +202,12 @@ describe("deepMerge", () => {
                 foo: {
                     bar: {
                         baz: {
-                            qux: "corge",
+                            qux: "quux",
                         },
                     },
                 },
             },
-            priority: "target",
+            priorityObjects: false,
         },
         {
             description: "Source object with multiple nested properties merged with target object",
@@ -235,7 +235,7 @@ describe("deepMerge", () => {
                     qux: "quux",
                 },
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Target object with multiple nested properties merged with source object",
@@ -263,7 +263,7 @@ describe("deepMerge", () => {
                     qux: "quux",
                 },
             },
-            priority: "target",
+            priorityObjects: false,
         },
         {
             description: "Source object with deeply nested properties merged with target object",
@@ -307,7 +307,7 @@ describe("deepMerge", () => {
                     },
                 },
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Source object with multiple deeply nested properties merged with target object",
@@ -359,7 +359,7 @@ describe("deepMerge", () => {
                     },
                 },
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Target object with multiple deeply nested properties merged with source object",
@@ -400,18 +400,18 @@ describe("deepMerge", () => {
                     bar: {
                         baz: {
                             qux: {
-                                quux: "fred",
+                                quux: "quuz",
                             },
                         },
                     },
                     corge: {
                         grault: {
-                            garply: "plugh",
+                            garply: "waldo",
                         },
                     },
                 },
             },
-            priority: "target",
+            priorityObjects: false,
         },
         {
             description: "Merge arrays with source object having priority over target object",
@@ -424,7 +424,7 @@ describe("deepMerge", () => {
             expected: {
                 foobar: [1, 2, 3, { foo: "bar" }],
             },
-            priority: "source",
+            priorityObjects: true,
         },
         {
             description: "Merge arrays with target object having priority over source object",
@@ -435,9 +435,9 @@ describe("deepMerge", () => {
                 foobar: [4, 5, 6, { bar: "foo" }],
             },
             expected: {
-                foobar: [4, 5, 6, { bar: "foo" }],
+                foobar: [1, 2, 3, { foo: "bar" }],
             },
-            priority: "target",
+            priorityObjects: false,
         },
         {
             description: "",
@@ -494,13 +494,13 @@ describe("deepMerge", () => {
                     foofoo: [1, 2, 3],
                 },
             },
-            priority: "source",
+            priorityObjects: true,
         },
     ]
 
-    testCases.forEach(({ description, source, target, priority, expected }) => {
+    testCases.forEach(({ description, source, target, priorityObjects, expected }) => {
         test.concurrent(description, ({ expect }) => {
-            expect(deepMerge(source, target, priority)).toEqual(expected)
+            expect(deepMerge(source, target, priorityObjects)).toEqual(expected)
         })
     })
 

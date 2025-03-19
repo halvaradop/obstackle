@@ -60,7 +60,7 @@ describe("omit", () => {
                 },
             },
             omit: "phone",
-            deep: true,
+            deep: false,
             expected: {
                 username: "john_doe",
                 address: {

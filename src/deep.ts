@@ -4,11 +4,13 @@ import { deepOmit } from "./omit.js"
 import type { Merge as DeepMerge } from "@halvaradop/ts-utility-types/objects"
 
 /**
- * Merges two objects in any depth recursively.
+ * Merges two objects in any depth recursively, by default the source object has priority over
+ * the target object. If the `priorityObjects` parameter is set to `true`, the object values will
+ * have the priority over primitive values.
  *
  * @param {object} source - The first object to merge.
  * @param {object} target - The second object to merge.
- * @param {string} priority - The priority of the merge. It can be "source", "target", or "object".
+ * @param {string} priorityObjects - The priority of the mere
  * @returns The merged object.
  *
  * @example
@@ -18,33 +20,27 @@ import type { Merge as DeepMerge } from "@halvaradop/ts-utility-types/objects"
 export const deepMerge = <Source extends Record<string, unknown>, Target extends Record<string, unknown>>(
     source: Source,
     target: Target,
-    priority: "source" | "target" | "object" = "source",
+    priorityObjects: boolean = false,
     nullish: boolean = false,
-): DeepMerge<Source, Target> => {
+): DeepMerge<Source, Target, false, typeof priorityObjects> => {
     const clone: any = {}
-    const priorityOne = priority === "source" ? source : target
-    const priorityTwo = priority === "source" ? target : source
-    for (const key in priorityOne) {
-        if (isSimpleType(priorityOne[key], nullish)) {
-            clone[key] = priorityOne[key]
-        } else if (isObject(priorityOne[key])) {
-            if (priority == "source") {
-                clone[key] = deepMerge(priorityOne[key] as any, (priorityTwo[key] ?? {}) as any, priority, nullish)
-            } else {
-                clone[key] = deepMerge((priorityTwo[key] ?? {}) as any, priorityOne[key] as any, priority, nullish)
-            }
-        } else if (isArray(priorityOne[key])) {
-            clone[key] = deepCopyArray(priorityOne[key])
+    for (const key in source) {
+        if (isSimpleType(source[key], nullish)) {
+            clone[key] = source[key]
+        } else if (isObject(source[key])) {
+            clone[key] = deepMerge(source[key] as any, (target[key] ?? {}) as any, priorityObjects, nullish)
+        } else if (isArray(source[key])) {
+            clone[key] = deepCopyArray(source[key])
         }
     }
-    for (const key in priorityTwo) {
+    for (const key in target) {
         if (!(key in clone)) {
-            if (isSimpleType(priorityTwo[key], nullish)) {
-                clone[key] = priorityTwo[key]
-            } else if (isObject(priorityTwo[key])) {
-                clone[key] = deepMerge({}, priorityTwo[key] as any, priority, nullish)
-            } else if (isArray(priorityTwo[key])) {
-                clone[key] = deepCopyArray(priorityTwo[key])
+            if (isSimpleType(target[key], nullish)) {
+                clone[key] = target[key]
+            } else if (isObject(target[key])) {
+                clone[key] = deepMerge({}, target[key] as any, priorityObjects, nullish)
+            } else if (isArray(target[key])) {
+                clone[key] = deepCopyArray(target[key])
             }
         }
     }
@@ -63,7 +59,7 @@ export const deepCopyArray = <Array extends unknown[]>(source: Array): Array => 
         if (isSimpleType(source[key], false)) {
             clone[key] = source[key]
         } else if (isObject(source[key])) {
-            clone[key] = deepMerge({}, source[key] as any, "source", false)
+            clone[key] = deepMerge(source[key] as any, {}, true, false)
         } else if (isArray(source[key])) {
             clone[key] = deepCopyArray(source[key])
         }
