@@ -1,5 +1,5 @@
 import { isArray, isObject } from "@halvaradop/ts-utility-types/validate"
-import type { DeepKeys, DeepOmit, LiteralUnion } from "@halvaradop/ts-utility-types/objects"
+import type { DeepKeys, DeepOmit, LiteralUnion } from "@halvaradop/ts-utility-types"
 import type { ArgumentKeys } from "./types.js"
 import { deepMerge } from "./deep.js"
 
