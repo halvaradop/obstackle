@@ -1,18 +1,12 @@
-import { isArray, isObject } from "@halvaradop/ts-utility-types/validate"
-import { isSimpleType } from "./utils.js"
+import { isArray, isObject, isNullish, isPrimitive } from "@halvaradop/ts-utility-types/validate"
+import { DeepNonNullish, FilterNonNullish } from "@halvaradop/ts-utility-types"
+import { isPrimitiveOrFunction } from "./utils.js"
 
-export const deepClone = <T extends Record<string, any> | unknown[]>(obj: T, nullish: boolean = true): T => {
-    const clone: any = isArray(obj) ? [] : {}
-    for (const key in obj) {
-        if (isSimpleType(obj[key], nullish)) {
-            clone[key] = obj[key]
-        } else if (isObject(obj[key])) {
-            clone[key] = deepClone(obj[key], nullish)
-        } else if (isArray(obj[key])) {
-            clone[key] = deepClone(obj[key], nullish)
-        }
-    }
-    return clone
+export const deepClone = <T extends Record<string, any> | unknown[], Skip extends boolean = false>(
+    obj: T,
+    skip: Skip = false as Skip,
+) => {
+    return isArray(obj) ? deepCloneArray(obj, skip) : deepCloneObject(obj, skip)
 }
 
 /**
@@ -21,6 +15,39 @@ export const deepClone = <T extends Record<string, any> | unknown[]>(obj: T, nul
  * @param {unknown[]} source - The source array to copy.
  * @returns {unknown[]} - The deep copied array.
  */
-export const deepCopyArray = <Array extends unknown[]>(source: Array, nullish: boolean = true): Array => {
-    return deepClone(source, nullish)
+export const deepCloneArray = <Array extends unknown[], Skip extends boolean = false>(
+    source: Array,
+    skip: Skip = false as Skip,
+) => {
+    const clone: unknown[] = []
+    for (const item of source) {
+        if (skip && isNullish(item)) continue
+        if (isPrimitive(item) || (isNullish(item) && !skip)) {
+            clone.push(item)
+        } else if (isArray(item)) {
+            clone.push(deepCloneArray(item, skip))
+        } else if (isObject(item)) {
+            clone.push(deepCloneObject(item, skip))
+        }
+    }
+    return clone
+}
+
+export const deepCloneObject = <Object extends Record<string, any>, Skip extends boolean = false>(
+    source: Object,
+    skip: Skip = false as Skip,
+) => {
+    const clone: Record<string, any> = {}
+    for (const key in source) {
+        const item = source[key]
+        if (skip && isNullish(item)) continue
+        if (isPrimitive(item) || (isNullish(item) && !skip)) {
+            clone[key] = item
+        } else if (isArray(item)) {
+            clone[key] = deepCloneArray(item, skip)
+        } else if (isObject(item)) {
+            clone[key] = deepCloneObject(item, skip)
+        }
+    }
+    return clone
 }

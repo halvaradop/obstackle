@@ -2,12 +2,12 @@ import { PrimitiveNullish } from "@halvaradop/ts-utility-types"
 import { isFunction, isNullish, isPrimitive } from "@halvaradop/ts-utility-types/validate"
 
 /**
- * Checks whether a value is a simple type or nullish.
+ * Checks whether a value is a primitive or function. If withNullish is true, also returns true for nullish values.
  *
  * @param {unknown} value - The value to check.
- * @param {boolean} nullish - Whether to consider null and undefined as simple types.
- * @returns {value is PrimitiveNullish} - Whether the value is a primitive or nullish.
+ * @param {boolean} withNullish - Whether to consider null and undefined as valid.
+ * @returns {boolean} - Whether the value is a primitive, function, or (if withNullish) nullish.
  */
-export const isSimpleType = (value: unknown, nullish: boolean): value is PrimitiveNullish => {
-    return isPrimitive(value) || (nullish && isNullish(value)) || isFunction(value)
+export const isPrimitiveOrFunction = (value: unknown, withNullish: boolean): value is PrimitiveNullish => {
+    return isPrimitive(value) || isFunction(value) || (isNullish(value) && withNullish)
 }
