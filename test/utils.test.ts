@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest"
-import { isPrimitiveOrFunction } from "../src/utils"
+import { getKeyFromPath, isPrimitiveOrFunction } from "../src/utils"
 
 describe("isPrimitiveOrFunction", () => {
     const testCases = [
@@ -56,6 +56,51 @@ describe("isPrimitiveOrFunction", () => {
     testCases.forEach(({ description, input, expected, withNullish }) => {
         test(description, () => {
             expect(isPrimitiveOrFunction(input, withNullish)).toBe(expected)
+        })
+    })
+})
+
+describe("getKeyFromPath", () => {
+    const testCases = [
+        {
+            description: "should return the key and the rest of the path",
+            input: "foo.bar.baz",
+            expected: ["foo", "bar.baz"],
+        },
+        {
+            description: "should return the key and an empty string if no dot is present",
+            input: "foo",
+            expected: ["foo", ""],
+        },
+        {
+            description: "should return the key and the rest of the path when there are multiple dots",
+            input: "foo.bar.baz.qux",
+            expected: ["foo", "bar.baz.qux"],
+        },
+        {
+            description: "should return the key and the rest of the path when the first part is empty",
+            input: ".bar.baz",
+            expected: ["", "bar.baz"],
+        },
+        {
+            description: "should return the key and the rest of the path when the last part is empty",
+            input: "foo.bar.",
+            expected: ["foo", "bar."],
+        },
+        {
+            description: "should return [false, ''] for an empty string input",
+            input: "",
+            expected: ["", ""],
+        },
+        {
+            description: "should return the key and the rest of the path for a single dot",
+            input: "foo.bar",
+            expected: ["foo", "bar"],
+        },
+    ]
+    testCases.forEach(({ description, input, expected }) => {
+        test(description, () => {
+            expect(getKeyFromPath(input)).toEqual(expected)
         })
     })
 })

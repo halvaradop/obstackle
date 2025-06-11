@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest"
+import { describe, expect, expectTypeOf, test } from "vitest"
 import { get } from "../src/get"
 
 describe("get", () => {
@@ -100,9 +100,54 @@ describe("get", () => {
         },
     ]
 
-    testCases.forEach(({ description, input, get: getKey, expected, defaultValue }) => {
-        test(description, () => {
-            expect(get(input, getKey as any, defaultValue)).toEqual(expected)
+    describe("get with string keys", () => {
+        testCases.forEach(({ description, input, get: getKey, expected, defaultValue }) => {
+            test(description, () => {
+                expect(get(input, getKey as any, defaultValue)).toEqual(expected)
+            })
+        })
+    })
+
+    describe("type checking", () => {
+        const user = {
+            name: "John",
+            address: {
+                city: "New York",
+                zip: "10001",
+                coordinates: {
+                    lat: 40.7128,
+                    long: -74.006,
+                },
+            },
+            tokens: [1, 2, 3, 4],
+            active: true,
+            meta: null as null | { created: string },
+        }
+
+        test("should return the correct type for a valid path", () => {
+            expectTypeOf(get(user, "name")).toEqualTypeOf<string>()
+            expectTypeOf(get(user, "tokens")).toEqualTypeOf<number[]>()
+            expectTypeOf(get(user, "address.zip")).toEqualTypeOf<string>()
+            expectTypeOf(get(user, "address.coordinates.lat")).toEqualTypeOf<number>()
+            expectTypeOf(get(user, "active")).toEqualTypeOf<boolean>()
+            expectTypeOf(get(user, "meta")).toEqualTypeOf<null | { created: string }>()
+            expectTypeOf(get(user, "address.coordinates")).toEqualTypeOf<{
+                lat: number
+                long: number
+            }>()
+            expectTypeOf(get(user, "address")).toEqualTypeOf<{
+                city: string
+                zip: string
+                coordinates: {
+                    lat: number
+                    long: number
+                }
+            }>()
+        })
+
+        test("should handle null types", () => {
+            expectTypeOf(get(user, "keyThatDoesNotExist" as any)).toEqualTypeOf<any>()
+            expectTypeOf(get(user, "keyThatDoesNotExist" as any, 12)).toEqualTypeOf<any>()
         })
     })
 })
