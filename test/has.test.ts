@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest"
+import { describe, expect, expectTypeOf, test } from "vitest"
 import { has } from "../src/has"
 
 describe("has", () => {
@@ -11,7 +11,7 @@ describe("has", () => {
                     qux: "quux",
                 },
             },
-            search: "foo",
+            key: "foo",
             expected: true,
         },
         {
@@ -22,7 +22,7 @@ describe("has", () => {
                     qux: "quux",
                 },
             },
-            search: "baz.qux",
+            key: "baz.qux",
             expected: true,
         },
         {
@@ -36,7 +36,7 @@ describe("has", () => {
                     },
                 },
             },
-            search: "foo.bar.baz.qux",
+            key: "foo.bar.baz.qux",
             expected: true,
         },
         {
@@ -51,14 +51,65 @@ describe("has", () => {
                     },
                 },
             },
-            search: "foo.bar.quux",
+            key: "foo.bar.quux",
             expected: true,
+        },
+        {
+            description: "looking for a property that does not exist in the first level",
+            input: {
+                foo: "bar",
+                baz: {
+                    qux: "quux",
+                },
+            },
+            key: "notHere",
+            expected: false,
+        },
+        {
+            description: "looking for a property that does not exist in the second level",
+            input: {
+                foo: "bar",
+                baz: {
+                    qux: "quux",
+                },
+            },
+            key: "baz.notHere",
+            expected: false,
+        },
+        {
+            description: "looking for a deeply nested property that does not exist",
+            input: {
+                foo: {
+                    bar: {
+                        baz: {
+                            qux: "quux",
+                        },
+                    },
+                },
+            },
+            key: "foo.bar.baz.notHere",
+            expected: false,
+        },
+        {
+            description: "looking for a property in a non-existent nested object",
+            input: {
+                foo: {
+                    bar: {
+                        baz: {
+                            qux: "quux",
+                        },
+                    },
+                },
+            },
+            key: "foo.baz.qux",
+            expected: false,
         },
     ]
 
-    testCases.forEach(({ description, input, search, expected }) => {
+    testCases.forEach(({ description, input, key, expected }) => {
         test(description, () => {
-            expect(has(input, search)).toBe(expected)
+            expect(has(input, key)).toBe(expected)
+            expectTypeOf(has(input, key)).toEqualTypeOf<boolean>()
         })
     })
 })

@@ -1,6 +1,7 @@
 import { describe, expectTypeOf, test } from "vitest"
+import type { DeepOmit } from "@halvaradop/ts-utility-types"
+import { mockUser } from "./testcases"
 import { omit, deepOmit } from "../src/omit"
-import type { DeepOmit } from "@halvaradop/ts-utility-types/objects"
 
 interface TestCase {
     description: string
@@ -124,23 +125,14 @@ describe("omit", () => {
         })
     })
 
-    test("Checks return types of omit", () => {
-        const user = {
-            firstname: "john",
-            lastname: "doe",
-            username: "john_doe",
-            address: {
-                city: "New York",
-                country: "USA",
-            },
-            phone: {
-                home: "1234567890",
-                work: "0987654321",
-            },
-        }
-        expectTypeOf(omit(user, ["address", "phone"])).toEqualTypeOf<Omit<typeof user, "address" | "phone">>()
-        expectTypeOf(omit(user, ["address", "phone", "firstname", "username"])).toEqualTypeOf<
-            Omit<typeof user, "address" | "phone" | "firstname" | "username">
+    test("type checking", () => {
+        expectTypeOf(omit(mockUser, "username")).toEqualTypeOf<Omit<typeof mockUser, "username">>()
+        expectTypeOf(omit(mockUser, "address")).toEqualTypeOf<Omit<typeof mockUser, "address">>()
+        expectTypeOf(omit(mockUser, "tokens")).toEqualTypeOf<Omit<typeof mockUser, "tokens">>()
+        expectTypeOf(omit(mockUser, "phones")).toEqualTypeOf<Omit<typeof mockUser, "phones">>()
+        expectTypeOf(omit(mockUser, ["phones"])).toEqualTypeOf<Omit<typeof mockUser, "phones">>()
+        expectTypeOf(omit(mockUser, ["username", "tokens", "phones"])).toEqualTypeOf<
+            Omit<typeof mockUser, "username" | "tokens" | "phones">
         >()
     })
 })
@@ -149,171 +141,96 @@ describe("deepOmit", () => {
     const testCases: TestCase[] = [
         {
             description: "should omit a single top-level property",
-            input: {
-                username: "john_doe",
-                address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
-                    },
-                },
-                phone: {
-                    home: "1234567890",
-                    work: "0987654321",
-                },
-            },
+            input: mockUser,
             omit: "username",
             expected: {
                 address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
+                    city: "New York",
+                    zip: "10001",
+                    coordinates: {
+                        lat: 40.7128,
+                        long: -74.006,
                     },
                 },
-                phone: {
+                phones: {
                     home: "1234567890",
                     work: "0987654321",
                 },
+                tokens: [1, 2, 3, 4],
+                active: true,
+                meta: null as null | { created: string },
             },
         },
         {
             description: "should omit multiple nested properties",
-            input: {
-                username: "john_doe",
-                address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
-                    },
-                },
-                phone: {
-                    home: "1234567890",
-                    work: "0987654321",
-                },
-            },
-            omit: ["username", "phone.work"],
+            input: mockUser,
+            omit: ["username", "phones.work"],
             expected: {
                 address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
+                    city: "New York",
+                    zip: "10001",
+                    coordinates: {
+                        lat: 40.7128,
+                        long: -74.006,
                     },
                 },
-                phone: {
+                phones: {
                     home: "1234567890",
                 },
+                tokens: [1, 2, 3, 4],
+                active: true,
+                meta: null as null | { created: string },
             },
         },
         {
             description: "should omit multiple top-level and nested properties",
-            input: {
-                username: "john_doe",
-                address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
-                    },
-                },
-                phone: {
-                    home: "1234567890",
-                    work: "0987654321",
-                },
-            },
-            omit: ["username", "phone"],
+            input: mockUser,
+            omit: ["username", "phones"],
             expected: {
                 address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
+                    city: "New York",
+                    zip: "10001",
+                    coordinates: {
+                        lat: 40.7128,
+                        long: -74.006,
                     },
                 },
+                tokens: [1, 2, 3, 4],
+                active: true,
+                meta: null as null | { created: string },
             },
         },
         {
             description: "should omit deeply nested properties",
-            input: {
-                username: "john_doe",
-                address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
-                    },
-                },
-                phone: {
-                    home: "1234567890",
-                    work: "0987654321",
-                },
-            },
-            omit: ["username", "phone", "address.country.code"],
+            input: mockUser,
+            omit: ["username", "phones", "address.coordinates.lat"],
             expected: {
                 address: {
-                    country: {
-                        name: "USA",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
+                    city: "New York",
+                    zip: "10001",
+                    coordinates: {
+                        long: -74.006,
                     },
                 },
+                tokens: [1, 2, 3, 4],
+                active: true,
+                meta: null as null | { created: string },
             },
         },
         {
             description: "should omit multiple deeply nested properties",
-            input: {
-                username: "john_doe",
-                address: {
-                    country: {
-                        name: "USA",
-                        code: "US",
-                        city: {
-                            name: "New York",
-                            code: "NY",
-                        },
-                    },
-                },
-                phone: {
-                    home: "1234567890",
-                    work: "0987654321",
-                },
-            },
-            omit: ["username", "phone", "address.country.code", "address.country.city.code"],
+            input: mockUser,
+            omit: ["username", "phones", "address.zip", "address.coordinates.long"],
             expected: {
                 address: {
-                    country: {
-                        name: "USA",
-                        city: {
-                            name: "New York",
-                        },
+                    city: "New York",
+                    coordinates: {
+                        lat: 40.7128,
                     },
                 },
+                tokens: [1, 2, 3, 4],
+                active: true,
+                meta: null as null | { created: string },
             },
         },
     ]
@@ -326,29 +243,17 @@ describe("deepOmit", () => {
     })
 
     test("Checks return types of deepOmit", () => {
-        const user = {
-            username: "john_doe",
-            address: {
-                country: {
-                    name: "USA",
-                    code: "US",
-                    city: {
-                        name: "New York",
-                        code: "NY",
-                    },
-                },
-            },
-            phone: {
-                home: "1234567890",
-                work: "0987654321",
-            },
-        }
-        expectTypeOf(deepOmit(user, ["username", "phone.work"])).toEqualTypeOf<DeepOmit<typeof user, "username" | "phone.work">>()
-        expectTypeOf(deepOmit(user, ["username", "phone.work", "address.country.code"])).toEqualTypeOf<
-            DeepOmit<typeof user, "username" | "phone.work" | "address.country.code">
+        expectTypeOf(deepOmit(mockUser, ["username", "phones.work"])).toEqualTypeOf<
+            DeepOmit<typeof mockUser, "username" | "phones.work">
+        >()
+        expectTypeOf(deepOmit(mockUser, ["username", "phones.work", "address.coordinates.long"])).toEqualTypeOf<
+            DeepOmit<typeof mockUser, "username" | "phones.work" | "address.coordinates.long">
         >()
         expectTypeOf(
-            deepOmit(user, ["username", "phone.work", "address.country.code", "address.country.city.code"]),
-        ).toEqualTypeOf<DeepOmit<typeof user, "username" | "phone.work" | "address.country.code" | "address.country.city.code">>()
+            deepOmit(mockUser, ["username", "phones.work", "address.coordinates.lat", "address.coordinates.long"]),
+        ).toEqualTypeOf<
+            DeepOmit<typeof mockUser, "username" | "phones.work" | "address.coordinates.lat" | "address.coordinates.long">
+        >()
+        expectTypeOf(deepOmit(mockUser, ["address", "phones"])).toEqualTypeOf<DeepOmit<typeof mockUser, "address" | "phones">>()
     })
 })
