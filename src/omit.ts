@@ -1,5 +1,5 @@
 import { isArray, isObject } from "@halvaradop/ts-utility-types/validate"
-import type { DeepKeys, DeepOmit, LiteralUnion } from "@halvaradop/ts-utility-types"
+import type { DeepKeys, DeepOmit } from "@halvaradop/ts-utility-types"
 import type { ArgumentKeys } from "./types.js"
 import { deepMerge } from "./deep.js"
 
@@ -39,20 +39,17 @@ export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj
         }),
         {},
     )
-    return deep ? (deepMerge(omitted, {}) as Omit<Obj, ArgumentKeys<Keys>>) : (omitted as Omit<Obj, ArgumentKeys<Keys>>)
+    return (deep ? deepMerge(omitted, {}) : omitted) as unknown as never
 }
 
 /**
  * @internal
  */
-const internalDeepOmit = <
-    Obj extends Record<string, unknown>,
-    Keys extends LiteralUnion<DeepKeys<Obj> & string, string> | LiteralUnion<DeepKeys<Obj> & string, string>[],
->(
+const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
     object: Obj,
     omit: Keys,
     path: string,
-): DeepOmit<Obj, ArgumentKeys<Keys>> => {
+): DeepOmit<Obj, ArgumentKeys<Keys> & string> => {
     const omitKeys = isArray(omit) ? omit : [omit]
     const clone: any = {}
     for (const key in object) {
@@ -65,7 +62,7 @@ const internalDeepOmit = <
             clone[key] = object[key]
         }
     }
-    return clone satisfies DeepOmit<Obj, ArgumentKeys<Keys>>
+    return clone as unknown as never
 }
 
 /**
@@ -84,12 +81,9 @@ const internalDeepOmit = <
  * @param {DeepKeys<object> | DeepKeys<object>[]} omit - The key or keys to omit from the object.
  * @returns {Omit<DeepKeys<Obj>, Keys & keyof Obj>} - The object without the omitted properties.
  */
-export const deepOmit = <
-    Obj extends Record<string, unknown>,
-    Keys extends LiteralUnion<DeepKeys<Obj> & string, string> | LiteralUnion<DeepKeys<Obj> & string, string>[],
->(
+export const deepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
     object: Obj,
     omit: Keys,
-): DeepOmit<Obj, ArgumentKeys<Keys, string>> => {
-    return internalDeepOmit(object, omit, "") as DeepOmit<Obj, ArgumentKeys<Keys, string>>
+): DeepOmit<Obj, ArgumentKeys<Keys> & string> => {
+    return internalDeepOmit(object, omit, "") as unknown as never
 }
