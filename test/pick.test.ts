@@ -1,6 +1,6 @@
 import { describe, expectTypeOf, test } from "vitest"
-import { pick } from "../src/pick"
-import { mockUser } from "./testcases"
+import { pick } from "@/pick.js"
+import { mockUser } from "./testcases.js"
 
 describe("pick", () => {
     const testCases = [

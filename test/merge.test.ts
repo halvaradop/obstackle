@@ -1,7 +1,7 @@
 import { describe, expectTypeOf, test } from "vitest"
 import type { DeepMerge, DeepNonNullish } from "@halvaradop/ts-utility-types"
-import { deepMerge } from "../src/deep"
-import { mockStore, mockUser } from "./testcases"
+import { deepMerge } from "@/deep.js"
+import { mockStore, mockUser } from "./testcases.js"
 
 interface TestCase {
     description: string

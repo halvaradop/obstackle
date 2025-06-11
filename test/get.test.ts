@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test } from "vitest"
-import { get } from "../src/get"
+import { get } from "@/get.js"
 
 describe("get", () => {
     const testCasesWithoutDefault = [

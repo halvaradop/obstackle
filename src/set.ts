@@ -1,7 +1,7 @@
 import { DeepKeys, DeepSet } from "@halvaradop/ts-utility-types"
 import { isObject } from "@halvaradop/ts-utility-types/validate"
-import { deepMerge } from "./deep.js"
-import { getKeyFromPath } from "./utils.js"
+import { deepMerge } from "@/deep.js"
+import { getKeyFromPath } from "@/utils.js"
 
 /**
  * @internal

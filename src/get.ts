@@ -1,6 +1,6 @@
 import { DeepKeys, DeepGet } from "@halvaradop/ts-utility-types"
 import { isObject } from "@halvaradop/ts-utility-types/validate"
-import { getKeyFromPath } from "./utils.js"
+import { getKeyFromPath } from "@/utils.js"
 
 /**
  *  @internal

@@ -1,7 +1,7 @@
 import { describe, expectTypeOf, test } from "vitest"
 import type { DeepOmit } from "@halvaradop/ts-utility-types"
-import { mockUser } from "./testcases"
-import { omit, deepOmit } from "../src/omit"
+import { mockUser } from "./testcases.js"
+import { omit, deepOmit } from "@/omit.js"
 
 interface TestCase {
     description: string

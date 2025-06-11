@@ -1,7 +1,7 @@
 import { describe, expect, expectTypeOf, test } from "vitest"
-import { set } from "../src/set"
-import { mockUser } from "./testcases"
-import { deepClone } from "../src/clone"
+import { set } from "@/set.js"
+import { mockUser } from "./testcases.js"
+import { deepClone } from "@/clone.js"
 
 describe("set", () => {
     const testCases = [
