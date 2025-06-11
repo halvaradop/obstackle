@@ -1,6 +1,7 @@
 import { describe, expectTypeOf, test } from "vitest"
+import type { DeepMerge, DeepNonNullish } from "@halvaradop/ts-utility-types"
 import { deepMerge } from "../src/deep"
-import type { Merge as DeepMerge } from "@halvaradop/ts-utility-types"
+import { mockStore, mockUser } from "./testcases"
 
 interface TestCase {
     description: string
@@ -50,14 +51,15 @@ describe("deepMerge", () => {
         {
             description: "Source object with nested properties merged with target object",
             source: {
+                foo: "foofoo",
+                barfoo: "barfoo",
+            },
+            target: {
                 foo: {
                     bar: {
                         foobar: "foobar",
                     },
                 },
-            },
-            target: {
-                barfoo: "barfoo",
             },
             expected: {
                 foo: {
@@ -72,6 +74,7 @@ describe("deepMerge", () => {
         {
             description: "Target object with nested properties merged with source object",
             source: {
+                foo: "foofoo",
                 barfoo: "barfoo",
             },
             target: {
@@ -82,11 +85,7 @@ describe("deepMerge", () => {
                 },
             },
             expected: {
-                foo: {
-                    bar: {
-                        foobar: "foobar",
-                    },
-                },
+                foo: "foofoo",
                 barfoo: "barfoo",
             },
             priorityObjects: false,
@@ -109,11 +108,11 @@ describe("deepMerge", () => {
             },
             expected: {
                 foo: {
-                    bar: {
-                        foobar: "foobar",
-                    },
                     foofoo: {
                         barfoo: "barfoo",
+                    },
+                    bar: {
+                        foobar: "foobar",
                     },
                 },
             },
@@ -123,7 +122,7 @@ describe("deepMerge", () => {
             description: "Target object with deeply nested properties merged with source object",
             source: {
                 foo: {
-                    foofoo: {
+                    bar: {
                         barfoo: "barfoo",
                     },
                 },
@@ -137,10 +136,8 @@ describe("deepMerge", () => {
             },
             expected: {
                 foo: {
-                    foofoo: {
-                        barfoo: "barfoo",
-                    },
                     bar: {
+                        barfoo: "barfoo",
                         foobar: "foobar",
                     },
                 },
@@ -440,6 +437,32 @@ describe("deepMerge", () => {
             priorityObjects: false,
         },
         {
+            description: "Merge arrays with target object having priority over source object",
+            source: {
+                foobar: "foobar",
+            },
+            target: {
+                foobar: [4, 5, 6, { bar: "foo" }],
+            },
+            expected: {
+                foobar: "foobar",
+            },
+            priorityObjects: false,
+        },
+        {
+            description: "Merge arrays with target object having priority over source object",
+            source: {
+                foobar: "foobar",
+            },
+            target: {
+                foobar: [4, 5, 6, { bar: "foo" }],
+            },
+            expected: {
+                foobar: "foobar",
+            },
+            priorityObjects: true,
+        },
+        {
             description: "",
             source: {
                 foo: {
@@ -505,21 +528,19 @@ describe("deepMerge", () => {
     })
 
     test("checks the return type", () => {
-        const source = {
-            foo: {
-                foofoo: {
-                    barfoo: "barfoo",
-                },
-            },
-        }
-        const target = {
-            foo: {
-                bar: {
-                    foobar: "foobar",
-                },
-            },
-        }
-        expectTypeOf(deepMerge(source, target)).toEqualTypeOf<DeepMerge<typeof source, typeof target>>()
-        expectTypeOf(deepMerge(source, target)).toEqualTypeOf<DeepMerge<typeof target, typeof source, false>>()
+        expectTypeOf(deepMerge(mockUser, mockStore)).toEqualTypeOf<DeepMerge<typeof mockUser, typeof mockStore, false, false>>()
+        expectTypeOf(deepMerge(mockStore, mockUser)).toEqualTypeOf<DeepMerge<typeof mockStore, typeof mockUser, false, false>>()
+        expectTypeOf(deepMerge(mockUser, mockStore, true)).toEqualTypeOf<
+            DeepMerge<typeof mockUser, typeof mockStore, false, true>
+        >()
+        expectTypeOf(deepMerge(mockStore, mockUser, true)).toEqualTypeOf<
+            DeepMerge<typeof mockUser, typeof mockStore, false, true>
+        >()
+        expectTypeOf(deepMerge(mockUser, mockStore, false, true)).toEqualTypeOf<
+            DeepNonNullish<DeepMerge<typeof mockUser, typeof mockStore, false, false>>
+        >()
+        expectTypeOf(deepMerge(mockStore, mockUser, false, true)).toEqualTypeOf<
+            DeepNonNullish<DeepMerge<typeof mockStore, typeof mockUser, false, false>>
+        >()
     })
 })
