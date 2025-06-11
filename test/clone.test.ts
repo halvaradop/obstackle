@@ -1,7 +1,7 @@
 import { describe, expect, expectTypeOf, test } from "vitest"
-import { deepClone } from "../src/clone"
+import { deepClone, deepCloneArray, deepCloneObject } from "../src/clone"
 
-describe("deepClone", () => {
+describe("deepCloneObject", () => {
     const testCasesWithoutNullish = [
         {
             description: "Simple object with string and number properties",
@@ -292,9 +292,82 @@ describe("deepClone", () => {
             })
         })
     })
-})
 
-/*
+    describe("type checking", () => {
+        test("should return the same type as input when skip is false", () => {
+            const object = { foo: "bar", bar: 42 }
+            const clone = deepCloneObject(object, false)
+            expectTypeOf(clone).toEqualTypeOf<typeof object>()
+        })
+
+        test("should return a filtered type when skip is true", () => {
+            const object = { foo: null, bar: undefined, baz: 123 }
+            const clone = deepCloneObject(object, true)
+            expectTypeOf(clone).toEqualTypeOf<{ baz: number }>()
+        })
+
+        test("should handle arrays with nullish values", () => {
+            const object = { nums: [1, null, 2, undefined, 3] }
+            const clone = deepCloneObject(object, true)
+            expectTypeOf(clone).toEqualTypeOf<{ nums: (number | null | undefined)[] }>()
+        })
+
+        test("should handle nested objects with nullish values", () => {
+            const object = {
+                bar: {
+                    foobar: {
+                        foofoo: {
+                            barbar: {
+                                baz: 42,
+                            },
+                        },
+                    },
+                },
+            }
+            const clone = deepCloneObject(object, true)
+            expectTypeOf(clone).toEqualTypeOf<typeof object>()
+        })
+
+        test("Represents a sample object with nested properties.", () => {
+            const object = {
+                foo: ["bar", "baz"],
+                bar: {
+                    baz: 42,
+                },
+            }
+            const clone = deepCloneObject(object, false)
+            expectTypeOf(clone).toEqualTypeOf<typeof object>()
+        })
+
+        test("should handle nested objects with nullish values", () => {
+            const object = {
+                bar: {
+                    foobar: {
+                        foofoo: {
+                            barbar: {
+                                baz: 42,
+                            },
+                            foobar: undefined,
+                        },
+                        barbar: null,
+                    },
+                },
+            }
+            const clone = deepCloneObject(object, true)
+            expectTypeOf(clone).toEqualTypeOf<{
+                bar: {
+                    foobar: {
+                        foofoo: {
+                            barbar: {
+                                baz: number
+                            }
+                        }
+                    }
+                }
+            }>()
+        })
+    })
+})
 
 describe("deepCloneArray", () => {
     const testCases = [
@@ -332,10 +405,114 @@ describe("deepCloneArray", () => {
 
     testCases.forEach(({ description, input, expected, skip }) => {
         test(description, () => {
-            const result = deepClone(input, skip)
+            const result = deepCloneArray(input, skip)
             expect(result).toEqual(expected)
+        })
+    })
+
+    describe("type checking", () => {
+        test("should return the same type as input when skip is false", () => {
+            const array = [1, 2, 3]
+            const clone = deepCloneArray(array, false)
+            expectTypeOf(clone).toEqualTypeOf<typeof array>()
+        })
+
+        test("should return a filtered type when skip is true", () => {
+            const array = [1, null, 2, undefined, 3]
+            const clone = deepCloneArray(array, true)
+            expectTypeOf(clone).toEqualTypeOf<(number | null | undefined)[]>()
         })
     })
 })
 
-    */
+/**
+ * Tests the type checking of the `deepClone` function. These tests are the same
+ * that are used in the `deepCloneObject` and `deepCloneArray` tests just to ensure
+ * that the type checking works correctly for the `deepClone` function as well.
+ */
+describe("deepClone type checking", () => {
+    test("should return the same type as input when skip is false", () => {
+        const object = { foo: "bar", bar: 42 }
+        const clone = deepClone(object, false)
+        expectTypeOf(clone).toEqualTypeOf<typeof object>()
+    })
+
+    test("should return a filtered type when skip is true", () => {
+        const object = { foo: null, bar: undefined, baz: 123 }
+        const clone = deepClone(object, true)
+        expectTypeOf(clone).toEqualTypeOf<{ baz: number }>()
+    })
+
+    test("should handle arrays with nullish values", () => {
+        const object = { nums: [1, null, 2, undefined, 3] }
+        const clone = deepClone(object, true)
+        expectTypeOf(clone).toEqualTypeOf<{ nums: (number | null | undefined)[] }>()
+    })
+
+    test("should handle nested objects with nullish values", () => {
+        const object = {
+            bar: {
+                foobar: {
+                    foofoo: {
+                        barbar: {
+                            baz: 42,
+                        },
+                    },
+                },
+            },
+        }
+        const clone = deepClone(object, true)
+        expectTypeOf(clone).toEqualTypeOf<typeof object>()
+    })
+
+    test("Represents a sample object with nested properties.", () => {
+        const object = {
+            foo: ["bar", "baz"],
+            bar: {
+                baz: 42,
+            },
+        }
+        const clone = deepClone(object, false)
+        expectTypeOf(clone).toEqualTypeOf<typeof object>()
+    })
+
+    test("should handle nested objects with nullish values", () => {
+        const object = {
+            bar: {
+                foobar: {
+                    foofoo: {
+                        barbar: {
+                            baz: 42,
+                        },
+                        foobar: undefined,
+                    },
+                    barbar: null,
+                },
+            },
+        }
+        const clone = deepClone(object, true)
+        expectTypeOf(clone).toEqualTypeOf<{
+            bar: {
+                foobar: {
+                    foofoo: {
+                        barbar: {
+                            baz: number
+                        }
+                    }
+                }
+            }
+        }>()
+    })
+
+    test("should return the same type as input when skip is false", () => {
+        const array = [1, 2, 3]
+        const clone = deepClone(array, false)
+        expectTypeOf(clone).toEqualTypeOf<typeof array>()
+    })
+
+    test("should return a filtered type when skip is true", () => {
+        const array = [1, null, 2, undefined, 3]
+        const clone = deepClone(array, true)
+        expectTypeOf(clone).toEqualTypeOf<(number | null | undefined)[]>()
+    })
+})
