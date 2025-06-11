@@ -1,7 +1,7 @@
 import { isArray, isObject } from "@halvaradop/ts-utility-types/validate"
 import type { DeepKeys, DeepOmit } from "@halvaradop/ts-utility-types"
-import type { ArgumentKeys } from "./types.js"
-import { deepMerge } from "./deep.js"
+import type { ArgumentKeys } from "@/types.js"
+import { deepMerge } from "@/deep.js"
 
 /**
  * Omit properties from an object by key or keys of the first level of the object.

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest"
-import { getKeyFromPath, isPrimitiveOrFunction } from "../src/utils"
+import { getKeyFromPath, isPrimitiveOrFunction } from "@/utils.js"
 
 describe("isPrimitiveOrFunction", () => {
     const testCases = [

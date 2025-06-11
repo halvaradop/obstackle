@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test } from "vitest"
-import { deepClone, deepCloneArray, deepCloneObject } from "../src/clone"
+import { deepClone, deepCloneArray, deepCloneObject } from "@/clone.js"
 
 describe("deepCloneObject", () => {
     const testCasesWithoutNullish = [

@@ -1,4 +1,4 @@
-import type { ArgumentKeys } from "./types.js"
+import type { ArgumentKeys } from "@/types.js"
 
 /**
  * Create a new object with only the picked keys.

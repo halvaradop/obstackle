@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test } from "vitest"
-import { has } from "../src/has"
+import { has } from "@/has.js"
 
 describe("has", () => {
     const testCases = [

@@ -1,8 +1,8 @@
 import { isObject, isArray, isNullish } from "@halvaradop/ts-utility-types/validate"
 import { DeepMerge, DeepNonNullish } from "@halvaradop/ts-utility-types/deep"
-import { isPrimitiveOrFunction } from "./utils.js"
-import { deepOmit } from "./omit.js"
-import { deepCloneArray } from "./clone.js"
+import { isPrimitiveOrFunction } from "@/utils.js"
+import { deepOmit } from "@/omit.js"
+import { deepCloneArray } from "@/clone.js"
 
 /**
  * Merges two objects in any depth recursively, by default the source object has priority over

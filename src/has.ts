@@ -1,5 +1,5 @@
 import { isObject } from "@halvaradop/ts-utility-types/validate"
-import { getKeyFromPath } from "./utils.js"
+import { getKeyFromPath } from "@/utils.js"
 
 /**
  * Checks if a key exists in an object, including nested objects. For nested objects,
