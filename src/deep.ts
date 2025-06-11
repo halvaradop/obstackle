@@ -1,7 +1,7 @@
 import { isObject, isArray } from "@halvaradop/ts-utility-types/validate"
-import { isSimpleType } from "./utils.js"
+import { isPrimitiveOrFunction } from "./utils.js"
 import { deepOmit } from "./omit.js"
-import type { Merge as DeepMerge } from "@halvaradop/ts-utility-types/objects"
+import { DeepMerge } from "@halvaradop/ts-utility-types/deep"
 
 /**
  * Merges two objects in any depth recursively, by default the source object has priority over
@@ -25,7 +25,7 @@ export const deepMerge = <Source extends Record<string, unknown>, Target extends
 ): DeepMerge<Source, Target, false, typeof priorityObjects> => {
     const clone: any = {}
     for (const key in source) {
-        if (isSimpleType(source[key], nullish)) {
+        if (isPrimitiveOrFunction(source[key], nullish)) {
             clone[key] = source[key]
         } else if (isObject(source[key])) {
             clone[key] = deepMerge(source[key] as any, (target[key] ?? {}) as any, priorityObjects, nullish)
@@ -35,7 +35,7 @@ export const deepMerge = <Source extends Record<string, unknown>, Target extends
     }
     for (const key in target) {
         if (!(key in clone)) {
-            if (isSimpleType(target[key], nullish)) {
+            if (isPrimitiveOrFunction(target[key], nullish)) {
                 clone[key] = target[key]
             } else if (isObject(target[key])) {
                 clone[key] = deepMerge({}, target[key] as any, priorityObjects, nullish)
@@ -56,7 +56,7 @@ export const deepMerge = <Source extends Record<string, unknown>, Target extends
 export const deepCopyArray = <Array extends unknown[]>(source: Array): Array => {
     const clone: any = []
     for (const key in source) {
-        if (isSimpleType(source[key], false)) {
+        if (isPrimitiveOrFunction(source[key], false)) {
             clone[key] = source[key]
         } else if (isObject(source[key])) {
             clone[key] = deepMerge(source[key] as any, {}, true, false)
