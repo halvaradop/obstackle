@@ -7,4 +7,10 @@ export default defineConfig({
             "@": fileURLToPath(new URL("./src", import.meta.url)),
         },
     },
+    test: {
+        coverage: {
+            include: ["src/**/*.ts"],
+            reporter: ["html", "text", "json"]
+        }
+    }
 })
