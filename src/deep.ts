@@ -45,7 +45,7 @@ export const deepMerge = <
                 skip,
             )
         } else if (isArray(source[key])) {
-            clone[key] = deepCloneArray(source[key], skip)
+            clone[key] = deepCloneArray(source[key] as unknown[], skip)
         }
     }
     for (const key in target) {
@@ -56,7 +56,7 @@ export const deepMerge = <
             } else if (isObject(target[key])) {
                 clone[key] = deepMerge({}, target[key] as any, priorityObjects, skip)
             } else if (isArray(target[key])) {
-                clone[key] = deepCloneArray(target[key], skip)
+                clone[key] = deepCloneArray(target[key] as unknown[], skip)
             }
         } else if (key in clone && priorityObjects && isObject(target[key]) && !isObject(clone[key])) {
             clone[key] = deepMerge({}, target[key] as Record<string, unknown>, priorityObjects, skip)

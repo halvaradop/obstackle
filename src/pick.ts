@@ -1,5 +1,3 @@
-import type { ArgumentKeys } from "@/types.js"
-
 /**
  * Create a new object with only the picked keys.
  *
@@ -22,7 +20,7 @@ import type { ArgumentKeys } from "@/types.js"
 export const pick = <Obj extends Record<string, unknown>, Keys extends keyof Obj | (keyof Obj)[]>(
     object: Obj,
     pick: Keys,
-): Pick<Obj, ArgumentKeys<Keys> & string> => {
+): Pick<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {
     const keys = Array.isArray(pick) ? pick : [pick]
     return Object.keys(object).reduce(
         (previous, now) => ({
