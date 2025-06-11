@@ -1,14 +1,5 @@
 import { isObject } from "@halvaradop/ts-utility-types/validate"
-
-const internalHas = <Obj extends Record<string, any>>(obj: Obj, targetKey: string, path: string = ""): boolean => {
-    return Object.keys(obj).some((key) => {
-        const currentPath = path ? `${path}.${key}` : key
-        if (currentPath === targetKey) {
-            return true
-        }
-        return isObject(obj[key]) && internalHas(obj[key], targetKey, currentPath)
-    })
-}
+import { getKeyFromPath } from "./utils.js"
 
 /**
  * Checks if a key exists in an object, including nested objects. For nested objects,
@@ -39,5 +30,16 @@ const internalHas = <Obj extends Record<string, any>>(obj: Obj, targetKey: strin
  * has(user, "address.zipcode")
  */
 export const has = <Obj extends Record<string, any>>(obj: Obj, key: string): boolean => {
-    return internalHas(obj, key)
+    const [getKey, path] = getKeyFromPath(key)
+    if (!isObject(obj) || !getKey) {
+        return false
+    }
+    if (getKey in obj) {
+        if (path === "") {
+            return true
+        } else {
+            return has(obj[getKey], path)
+        }
+    }
+    return false
 }

@@ -2,7 +2,7 @@ import { describe, expect, expectTypeOf, test } from "vitest"
 import { get } from "../src/get"
 
 describe("get", () => {
-    const testCases = [
+    const testCasesWithoutDefault = [
         {
             description: "looking for a property that exists in the first level",
             input: {
@@ -11,7 +11,7 @@ describe("get", () => {
                     qux: "quux",
                 },
             },
-            get: "foo",
+            key: "foo",
             expected: "bar",
         },
         {
@@ -22,7 +22,7 @@ describe("get", () => {
                     qux: "quux",
                 },
             },
-            get: "baz.qux",
+            key: "baz.qux",
             expected: "quux",
         },
         {
@@ -36,7 +36,7 @@ describe("get", () => {
                     },
                 },
             },
-            get: "foo.bar.baz.qux",
+            key: "foo.bar.baz.qux",
             expected: "quux",
         },
         {
@@ -51,7 +51,7 @@ describe("get", () => {
                     },
                 },
             },
-            get: "foo.bar.quux",
+            key: "foo.bar.quux",
             expected: "corge",
         },
         {
@@ -65,9 +65,12 @@ describe("get", () => {
                     },
                 },
             },
-            get: "foo.baz",
+            key: "foo.baz",
             expected: undefined,
         },
+    ]
+
+    const testCasesWithDefault = [
         {
             description: "looking for a property that does not exist and returning a default value",
             input: {
@@ -79,7 +82,7 @@ describe("get", () => {
                     },
                 },
             },
-            get: "foo.baz",
+            key: "foo.baz",
             defaultValue: -1,
             expected: -1,
         },
@@ -94,16 +97,24 @@ describe("get", () => {
                     },
                 },
             },
-            get: "foo.bar.baz.qz",
+            key: "foo.bar.baz.qz",
             defaultValue: "default",
             expected: "default",
         },
     ]
 
     describe("get with string keys", () => {
-        testCases.forEach(({ description, input, get: getKey, expected, defaultValue }) => {
+        testCasesWithoutDefault.forEach(({ description, input, key, expected }) => {
             test(description, () => {
-                expect(get(input, getKey as any, defaultValue)).toEqual(expected)
+                expect(get(input, key as any)).toEqual(expected)
+            })
+        })
+    })
+
+    describe("get with string keys and default values", () => {
+        testCasesWithDefault.forEach(({ description, input, key, defaultValue, expected }) => {
+            test(description, () => {
+                expect(get(input, key as any, defaultValue)).toEqual(expected)
             })
         })
     })

@@ -51,5 +51,5 @@ export const get = <Obj extends Record<string, unknown>, Keys extends DeepKeys<O
     keys: Keys,
     defaultValue?: Default,
 ): DeepGet<Obj, Keys> => {
-    return get(object, keys) ?? (defaultValue as unknown as never)
+    return (internalGet(object, keys) ?? defaultValue) as unknown as never
 }
