@@ -3,7 +3,7 @@
   "display": "Node 20",
   "_version": "20.1.0",
   "compilerOptions": {
-    "lib": ["ES2022"],
+    "lib": ["ES2022", "DOM"],
     "target": "ES2022",
     "module": "Node16",
     "moduleResolution": "Node16",
@@ -22,5 +22,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
