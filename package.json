@@ -1,6 +1,6 @@
 {
   "name": "@halvaradop/obstackle",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A collection of utility functions for working with objects in TypeScript.",
   "type": "module",
   "scripts": {
@@ -50,10 +50,40 @@
     "dist"
   ],
   "exports": {
+    "./clone": {
+      "types": "./dist/clone.d.ts",
+      "require": "./dist/clone.cjs",
+      "import": "./dist/clone.js"
+    },
     "./deep": {
       "types": "./dist/deep.d.ts",
       "require": "./dist/deep.cjs",
       "import": "./dist/deep.js"
+    },
+    "./get": {
+      "types": "./dist/get.d.ts",
+      "require": "./dist/get.cjs",
+      "import": "./dist/get.js"
+    },
+    "./has": {
+      "types": "./dist/has.d.ts",
+      "require": "./dist/has.cjs",
+      "import": "./dist/has.js"
+    },
+    "./omit": {
+      "types": "./dist/omit.d.ts",
+      "require": "./dist/omit.cjs",
+      "import": "./dist/omit.js"
+    },
+    "./pick": {
+      "types": "./dist/pick.d.ts",
+      "require": "./dist/pick.cjs",
+      "import": "./dist/pick.js"
+    },
+    "./set": {
+      "types": "./dist/set.d.ts",
+      "require": "./dist/set.cjs",
+      "import": "./dist/set.js"
     }
   },
   "packageManager": "pnpm@10.3.0",
