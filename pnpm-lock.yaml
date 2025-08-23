@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@halvaradop/obstackle':
+        specifier: 'link:'
+        version: 'link:'
       '@halvaradop/ts-utility-types':
         specifier: ^0.20.0
         version: 0.20.0

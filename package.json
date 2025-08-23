@@ -35,6 +35,7 @@
     "url": "https://github.com/halvaradop/obstackle/issues"
   },
   "dependencies": {
+    "@halvaradop/obstackle": "link:",
     "@halvaradop/ts-utility-types": "^0.20.0"
   },
   "devDependencies": {
