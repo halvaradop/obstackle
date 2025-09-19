@@ -28,7 +28,7 @@ export const deepMerge = <
     source: Source,
     target: Target,
     priorityObjects: PriorityObjects = false as PriorityObjects,
-    skip: Skip = false as Skip,
+    skip: Skip = false as Skip
 ): Skip extends true
     ? DeepNonNullish<DeepMerge<Source, Target, false, PriorityObjects>>
     : DeepMerge<Source, Target, false, PriorityObjects> => {
@@ -42,7 +42,7 @@ export const deepMerge = <
                 source[key] as Record<string, unknown>,
                 (target[key] ?? {}) as Record<string, unknown>,
                 priorityObjects,
-                skip,
+                skip
             )
         } else if (isArray(source[key])) {
             clone[key] = deepCloneArray(source[key] as unknown[], skip)

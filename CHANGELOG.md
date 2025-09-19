@@ -1,4 +1,4 @@
-# @halvaradop/obstackle
+# `@halvaradop/obstackle`
 
 ## [Unreleased]
 

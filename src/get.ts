@@ -7,7 +7,7 @@ import { getKeyFromPath } from "@/utils.js"
  */
 const internalGet = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj>>(
     object: Obj,
-    key: Keys,
+    key: Keys
 ): DeepGet<Obj, Keys & string> | undefined => {
     const [getKey, path] = getKeyFromPath(key as string)
     if (!isObject(object) || !getKey) {
@@ -49,7 +49,7 @@ const internalGet = <Obj extends Record<string, unknown>, Keys extends DeepKeys<
 export const get = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj>, Default = undefined>(
     object: Obj,
     keys: Keys,
-    defaultValue?: Default,
+    defaultValue?: Default
 ): DeepGet<Obj, Keys & string> => {
     return (internalGet(object, keys) ?? defaultValue) as unknown as never
 }

@@ -250,7 +250,7 @@ describe("deepOmit", () => {
             DeepOmit<typeof mockUser, "username" | "phones.work" | "address.coordinates.long">
         >()
         expectTypeOf(
-            deepOmit(mockUser, ["username", "phones.work", "address.coordinates.lat", "address.coordinates.long"]),
+            deepOmit(mockUser, ["username", "phones.work", "address.coordinates.lat", "address.coordinates.long"])
         ).toEqualTypeOf<
             DeepOmit<typeof mockUser, "username" | "phones.work" | "address.coordinates.lat" | "address.coordinates.long">
         >()

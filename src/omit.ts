@@ -28,7 +28,7 @@ import { deepMerge } from "@/deep.js"
 export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj | (keyof Obj)[]>(
     object: Obj,
     omit: Keys,
-    deep: boolean = false,
+    deep: boolean = false
 ): Omit<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {
     const keys = isArray(omit) ? omit : [omit]
     const omitted = Object.keys(object).reduce(
@@ -36,7 +36,7 @@ export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj
             ...previous,
             ...(keys.includes(now as Keys) ? {} : { [now]: object[now] }),
         }),
-        {},
+        {}
     )
     return (deep ? deepMerge(omitted, {}) : omitted) as unknown as never
 }
@@ -47,7 +47,7 @@ export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj
 const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
     object: Obj,
     omit: Keys,
-    path: string,
+    path: string
 ): DeepOmit<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {
     const omitKeys = isArray(omit) ? omit : [omit]
     const clone: any = {}
@@ -82,7 +82,7 @@ const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends Deep
  */
 export const deepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
     object: Obj,
-    omit: Keys,
+    omit: Keys
 ): DeepOmit<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {
     return internalDeepOmit(object, omit, "") as unknown as never
 }

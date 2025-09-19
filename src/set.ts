@@ -57,7 +57,7 @@ export const set = <Obj extends Record<string, any>, Key extends DeepKeys<Obj> &
     obj: Obj,
     key: Key,
     value: Value,
-    newCopy: boolean = false,
+    newCopy: boolean = false
 ): DeepSet<Obj, Key, Value> => {
     const toSet = (newCopy ? deepMerge(obj, {}) : obj) as Record<string, any>
     internalSet(toSet, key, value)

@@ -19,7 +19,7 @@
  */
 export const pick = <Obj extends Record<string, unknown>, Keys extends keyof Obj | (keyof Obj)[]>(
     object: Obj,
-    pick: Keys,
+    pick: Keys
 ): Pick<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {
     const keys = Array.isArray(pick) ? pick : [pick]
     return Object.keys(object).reduce(
@@ -27,6 +27,6 @@ export const pick = <Obj extends Record<string, unknown>, Keys extends keyof Obj
             ...previous,
             ...(keys.includes(now as Keys) ? { [now]: object[now] } : {}),
         }),
-        {},
+        {}
     ) as unknown as any
 }

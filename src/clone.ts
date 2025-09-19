@@ -11,7 +11,7 @@ import { DeepNonNullish, FilterNonNullish } from "@halvaradop/ts-utility-types"
  */
 export const deepClone = <T extends Record<string, any> | unknown[], Skip extends boolean = false>(
     obj: T,
-    skip: Skip = false as Skip,
+    skip: Skip = false as Skip
 ): Skip extends true ? (T extends unknown[] ? FilterNonNullish<T> : DeepNonNullish<T>) : T => {
     const clone = isArray(obj) ? deepCloneArray(obj, skip) : deepCloneObject(obj, skip)
     return clone as unknown as any
@@ -28,7 +28,7 @@ export const deepClone = <T extends Record<string, any> | unknown[], Skip extend
  */
 export const deepCloneArray = <Array extends unknown[], Skip extends boolean = false>(
     source: Array,
-    skip: Skip = false as Skip,
+    skip: Skip = false as Skip
 ): Skip extends true ? FilterNonNullish<Array> : Array => {
     const clone: unknown[] = []
     for (const item of source) {
@@ -55,7 +55,7 @@ export const deepCloneArray = <Array extends unknown[], Skip extends boolean = f
  */
 export const deepCloneObject = <Object extends Record<string, any>, Skip extends boolean = false>(
     source: Object,
-    skip: Skip = false as Skip,
+    skip: Skip = false as Skip
 ): Skip extends true ? DeepNonNullish<Object> : Object => {
     const clone: Record<string, any> = {}
     for (const key in source) {
