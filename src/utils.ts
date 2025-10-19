@@ -1,4 +1,4 @@
-import { PrimitiveNullish } from "@halvaradop/ts-utility-types"
+import type { PrimitiveNullish } from "@halvaradop/ts-utility-types"
 import { isFunction, isNullish, isPrimitive } from "@halvaradop/ts-utility-types/validate"
 
 /**
@@ -20,7 +20,7 @@ export const isPrimitiveOrFunction = (value: unknown, withNullish: boolean): val
  * @returns {[string, string]} - Tuple of [firstKey, restOfPath].
  */
 export const getKeyFromPath = (path: string): [string, string] => {
-    if (!path) return ["", ""]
+    if (path === "") return ["", ""]
     const dotIndex = path.indexOf(".")
     if (dotIndex === -1) {
         return [path, ""]

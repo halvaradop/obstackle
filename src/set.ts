@@ -1,4 +1,4 @@
-import { DeepKeys, DeepSet } from "@halvaradop/ts-utility-types"
+import type { DeepKeys, DeepSet } from "@halvaradop/ts-utility-types"
 import { isObject } from "@halvaradop/ts-utility-types/validate"
 import { deepMerge } from "@/deep.js"
 import { getKeyFromPath } from "@/utils.js"
@@ -6,16 +6,17 @@ import { getKeyFromPath } from "@/utils.js"
 /**
  * @internal
  */
-const internalSet = <Obj extends Record<string, any>>(obj: Obj, key: DeepKeys<Obj> & string, value: any) => {
+const internalSet = <Obj extends Record<string, unknown>>(obj: Obj, key: DeepKeys<Obj> & string, value: unknown) => {
     const [getKey, path] = getKeyFromPath(key)
-    if (!isObject(obj) || !getKey) {
+    if (!isObject(obj) || getKey === "") {
         return
     }
     if (getKey in obj) {
         if (path === "") {
+            // @ts-ignore
             obj[getKey as keyof typeof obj] = value
         } else {
-            internalSet(obj[getKey as keyof typeof obj] as Record<string, any>, path, value)
+            internalSet(obj[getKey as keyof typeof obj] as Record<string, unknown>, path, value)
         }
     }
 }
@@ -53,13 +54,13 @@ const internalSet = <Obj extends Record<string, any>>(obj: Obj, key: DeepKeys<Ob
  * const newObj = set(obj, "bar.barbar.bar", "newBar", true)
  *
  */
-export const set = <Obj extends Record<string, any>, Key extends DeepKeys<Obj> & string, Value extends unknown>(
+export const set = <Obj extends Record<string, unknown>, Key extends DeepKeys<Obj> & string, Value extends unknown>(
     obj: Obj,
     key: Key,
     value: Value,
     newCopy: boolean = false
 ): DeepSet<Obj, Key, Value> => {
-    const toSet = (newCopy ? deepMerge(obj, {}) : obj) as Record<string, any>
+    const toSet = (newCopy ? deepMerge(obj, {}) : obj) as Record<string, unknown>
     internalSet(toSet, key, value)
     return toSet as unknown as never
 }

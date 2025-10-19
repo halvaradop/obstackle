@@ -13,8 +13,8 @@ importers:
         version: 0.20.0
     devDependencies:
       '@halvaradop/eslint-config':
-        specifier: latest
-        version: 1.2.0(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)
+        specifier: ^1.2.3
+        version: 1.2.3(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)
       '@halvaradop/prettier-config':
         specifier: ^1.2.1
         version: 1.2.1(prettier@3.5.3)
@@ -264,8 +264,8 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@halvaradop/eslint-config@1.2.0':
-    resolution: {integrity: sha512-TGazikmdyaDsPx4R0ruh3KLrR6ceCWX0J0P/dvNvVNXcQSoQ1QPBOqXZOFwQgdlazTF3wnw3zmNiJxRlkWfe+Q==}
+  '@halvaradop/eslint-config@1.2.3':
+    resolution: {integrity: sha512-wqSZLsn9MO83F6UDbbW0/+pKNZQpQq5hMX7j87ytHHZaDk9tgwPoQ/D9W7yKNmndwV4MV9ZMCITHjnahVJ57wg==}
     peerDependencies:
       eslint: ^9.0.0
 
@@ -2130,7 +2130,7 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@halvaradop/eslint-config@1.2.0(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)':
+  '@halvaradop/eslint-config@1.2.3(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)':
     dependencies:
       '@eslint/js': 9.36.0
       '@next/eslint-plugin-next': 15.5.3

@@ -25,7 +25,7 @@ import { deepMerge } from "@/deep.js"
  * // Expected: { username: "john_doe", email: "john_doe@gmail.com" }
  * omit(user, ["password"])
  */
-export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj | (keyof Obj)[]>(
+export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj | Array<keyof Obj>>(
     object: Obj,
     omit: Keys,
     deep: boolean = false
@@ -44,19 +44,19 @@ export const omit = <Obj extends Record<string, unknown>, Keys extends keyof Obj
 /**
  * @internal
  */
-const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
+const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | Array<DeepKeys<Obj>>>(
     object: Obj,
     omit: Keys,
     path: string
 ): DeepOmit<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {
     const omitKeys = isArray(omit) ? omit : [omit]
-    const clone: any = {}
+    const clone: Record<string, unknown> = {}
     for (const key in object) {
         const currentPath = path.length > 0 ? `${path}.${key}` : key
         if (omitKeys.includes(currentPath as Keys)) {
             continue
         } else if (isObject(object[key])) {
-            clone[key] = internalDeepOmit(object[key] as any, omitKeys as any, currentPath)
+            clone[key] = internalDeepOmit(object[key] as Record<string, unknown>, omitKeys as string[], currentPath)
         } else {
             clone[key] = object[key]
         }
@@ -80,7 +80,7 @@ const internalDeepOmit = <Obj extends Record<string, unknown>, Keys extends Deep
  * @param {DeepKeys<object> | DeepKeys<object>[]} omit - The key or keys to omit from the object.
  * @returns {Omit<DeepKeys<Obj>, Keys & keyof Obj>} - The object without the omitted properties.
  */
-export const deepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | DeepKeys<Obj>[]>(
+export const deepOmit = <Obj extends Record<string, unknown>, Keys extends DeepKeys<Obj> | Array<DeepKeys<Obj>>>(
     object: Obj,
     omit: Keys
 ): DeepOmit<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {

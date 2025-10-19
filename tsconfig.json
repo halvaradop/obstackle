@@ -8,5 +8,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "test"]
+  "include": ["src", "test"],
+  "exclude": ["vitest.config.ts", "tsup.config.ts"]
 }

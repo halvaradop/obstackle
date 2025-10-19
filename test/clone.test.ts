@@ -309,7 +309,7 @@ describe("deepCloneObject", () => {
         test("should handle arrays with nullish values", () => {
             const object = { nums: [1, null, 2, undefined, 3] }
             const clone = deepCloneObject(object, true)
-            expectTypeOf(clone).toEqualTypeOf<{ nums: (number | null | undefined)[] }>()
+            expectTypeOf(clone).toEqualTypeOf<{ nums: Array<number | null | undefined> }>()
         })
 
         test("should handle nested objects with nullish values", () => {
@@ -420,7 +420,7 @@ describe("deepCloneArray", () => {
         test("should return a filtered type when skip is true", () => {
             const array = [1, null, 2, undefined, 3]
             const clone = deepCloneArray(array, true)
-            expectTypeOf(clone).toEqualTypeOf<(number | null | undefined)[]>()
+            expectTypeOf(clone).toEqualTypeOf<Array<number | null | undefined>>()
         })
     })
 })
@@ -446,7 +446,7 @@ describe("deepClone type checking", () => {
     test("should handle arrays with nullish values", () => {
         const object = { nums: [1, null, 2, undefined, 3] }
         const clone = deepClone(object, true)
-        expectTypeOf(clone).toEqualTypeOf<{ nums: (number | null | undefined)[] }>()
+        expectTypeOf(clone).toEqualTypeOf<{ nums: Array<number | null | undefined> }>()
     })
 
     test("should handle nested objects with nullish values", () => {
@@ -513,6 +513,6 @@ describe("deepClone type checking", () => {
     test("should return a filtered type when skip is true", () => {
         const array = [1, null, 2, undefined, 3]
         const clone = deepClone(array, true)
-        expectTypeOf(clone).toEqualTypeOf<(number | null | undefined)[]>()
+        expectTypeOf(clone).toEqualTypeOf<Array<number | null | undefined>>()
     })
 })

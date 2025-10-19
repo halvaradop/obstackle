@@ -40,7 +40,7 @@
     "@halvaradop/ts-utility-types": "^0.20.0"
   },
   "devDependencies": {
-    "@halvaradop/eslint-config": "latest",
+    "@halvaradop/eslint-config": "^1.2.3",
     "@halvaradop/prettier-config": "^1.2.1",
     "@halvaradop/tsconfig": "^1.1.2",
     "@halvaradop/tsup-config": "^1.1.1",

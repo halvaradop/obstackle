@@ -1,4 +1,4 @@
-import { DeepKeys, DeepGet } from "@halvaradop/ts-utility-types"
+import type { DeepKeys, DeepGet } from "@halvaradop/ts-utility-types"
 import { isObject } from "@halvaradop/ts-utility-types/validate"
 import { getKeyFromPath } from "@/utils.js"
 
@@ -10,7 +10,7 @@ const internalGet = <Obj extends Record<string, unknown>, Keys extends DeepKeys<
     key: Keys
 ): DeepGet<Obj, Keys & string> | undefined => {
     const [getKey, path] = getKeyFromPath(key as string)
-    if (!isObject(object) || !getKey) {
+    if (!isObject(object) || getKey === "") {
         return undefined
     }
     if (getKey in object) {

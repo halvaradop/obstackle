@@ -1,5 +1,5 @@
 import { isObject, isArray, isNullish } from "@halvaradop/ts-utility-types/validate"
-import { DeepMerge, DeepNonNullish } from "@halvaradop/ts-utility-types/deep"
+import type { DeepMerge, DeepNonNullish } from "@halvaradop/ts-utility-types/deep"
 import { isPrimitiveOrFunction } from "@/utils.js"
 import { deepOmit } from "@/omit.js"
 import { deepCloneArray } from "@/clone.js"
@@ -29,10 +29,8 @@ export const deepMerge = <
     target: Target,
     priorityObjects: PriorityObjects = false as PriorityObjects,
     skip: Skip = false as Skip
-): Skip extends true
-    ? DeepNonNullish<DeepMerge<Source, Target, false, PriorityObjects>>
-    : DeepMerge<Source, Target, false, PriorityObjects> => {
-    const clone: any = {}
+) => {
+    const clone = {} as Record<string, unknown>
     for (const key in source) {
         if (skip && isNullish(source[key])) continue
         if (isPrimitiveOrFunction(source[key], skip)) {
@@ -54,7 +52,7 @@ export const deepMerge = <
             if (isPrimitiveOrFunction(target[key], skip)) {
                 clone[key] = target[key]
             } else if (isObject(target[key])) {
-                clone[key] = deepMerge({}, target[key] as any, priorityObjects, skip)
+                clone[key] = deepMerge({}, target[key] as Record<string, unknown>, priorityObjects, skip)
             } else if (isArray(target[key])) {
                 clone[key] = deepCloneArray(target[key] as unknown[], skip)
             }
@@ -62,7 +60,9 @@ export const deepMerge = <
             clone[key] = deepMerge({}, target[key] as Record<string, unknown>, priorityObjects, skip)
         }
     }
-    return clone
+    return clone as Skip extends true
+        ? DeepNonNullish<DeepMerge<Source, Target, false, PriorityObjects>>
+        : DeepMerge<Source, Target, false, PriorityObjects>
 }
 
 export { deepOmit }

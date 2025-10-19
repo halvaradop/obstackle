@@ -1,20 +1,20 @@
 import { isArray, isObject, isNullish, isPrimitive } from "@halvaradop/ts-utility-types/validate"
-import { DeepNonNullish, FilterNonNullish } from "@halvaradop/ts-utility-types"
+import type { DeepNonNullish, FilterNonNullish } from "@halvaradop/ts-utility-types"
 
 /**
  * Creates a deep copy of an object or array. Recursively copies properties, handling nested arrays and objects.
  * If `skip` is true, nullish values (null or undefined) are omitted from the result.
  *
- * @param {Record<string, any> | unknown[]} obj - The object or array to deep clone.
+ * @param {Record<string, unknown> | unknown[]} obj - The object or array to deep clone.
  * @param {boolean} skip - If true, skips nullish values in the object or array.
- * @returns {Record<string, any> | unknown[]} A deep copy of the object or array, with optional omission of nullish values.
+ * @returns {Record<string, unknown> | unknown[]} A deep copy of the object or array, with optional omission of nullish values.
  */
-export const deepClone = <T extends Record<string, any> | unknown[], Skip extends boolean = false>(
+export const deepClone = <T extends Record<string, unknown> | unknown[], Skip extends boolean = false>(
     obj: T,
     skip: Skip = false as Skip
-): Skip extends true ? (T extends unknown[] ? FilterNonNullish<T> : DeepNonNullish<T>) : T => {
+) => {
     const clone = isArray(obj) ? deepCloneArray(obj, skip) : deepCloneObject(obj, skip)
-    return clone as unknown as any
+    return clone as Skip extends true ? (T extends unknown[] ? FilterNonNullish<T> : DeepNonNullish<T>) : T
 }
 
 /**
@@ -26,10 +26,7 @@ export const deepClone = <T extends Record<string, any> | unknown[], Skip extend
  * @param {boolean} skip - If true, skips nullish values in the array.
  * @returns {unknown[]} - The deep copied array.
  */
-export const deepCloneArray = <Array extends unknown[], Skip extends boolean = false>(
-    source: Array,
-    skip: Skip = false as Skip
-): Skip extends true ? FilterNonNullish<Array> : Array => {
+export const deepCloneArray = <Arr extends unknown[], Skip extends boolean = false>(source: Arr, skip: Skip = false as Skip) => {
     const clone: unknown[] = []
     for (const item of source) {
         if (skip && isNullish(item)) continue
@@ -41,7 +38,7 @@ export const deepCloneArray = <Array extends unknown[], Skip extends boolean = f
             clone.push(deepCloneObject(item, skip))
         }
     }
-    return clone as unknown as any
+    return clone as Skip extends true ? FilterNonNullish<Arr> : Arr
 }
 
 /**
@@ -53,11 +50,11 @@ export const deepCloneArray = <Array extends unknown[], Skip extends boolean = f
  * @param {boolean} skip - If true, skips nullish values in the object.
  * @returns {Record<string, any>} - The deep copied object.
  */
-export const deepCloneObject = <Object extends Record<string, any>, Skip extends boolean = false>(
+export const deepCloneObject = <Object extends Record<string, unknown>, Skip extends boolean = false>(
     source: Object,
     skip: Skip = false as Skip
-): Skip extends true ? DeepNonNullish<Object> : Object => {
-    const clone: Record<string, any> = {}
+) => {
+    const clone: Record<string, unknown> = {}
     for (const key in source) {
         const item = source[key]
         if (skip && isNullish(item)) continue
@@ -66,8 +63,8 @@ export const deepCloneObject = <Object extends Record<string, any>, Skip extends
         } else if (isArray(item)) {
             clone[key] = deepCloneArray(item, skip)
         } else if (isObject(item)) {
-            clone[key] = deepCloneObject(item, skip)
+            clone[key] = deepCloneObject(item as Record<string, unknown>, skip)
         }
     }
-    return clone as unknown as any
+    return clone as Skip extends true ? DeepNonNullish<Object> : Object
 }
