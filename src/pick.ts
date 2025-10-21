@@ -17,16 +17,13 @@
  * // Expected: { username: "john_doe" }
  * pick(user, "username")
  */
-export const pick = <Obj extends Record<string, unknown>, Keys extends keyof Obj | (keyof Obj)[]>(
-    object: Obj,
-    pick: Keys,
-): Pick<Obj, Keys extends string[] ? Keys[number] & string : Keys & string> => {
+export const pick = <Obj extends Record<string, unknown>, Keys extends keyof Obj | Array<keyof Obj>>(object: Obj, pick: Keys) => {
     const keys = Array.isArray(pick) ? pick : [pick]
     return Object.keys(object).reduce(
         (previous, now) => ({
             ...previous,
             ...(keys.includes(now as Keys) ? { [now]: object[now] } : {}),
         }),
-        {},
-    ) as unknown as any
+        {}
+    ) as Pick<Obj, Keys extends string[] ? Keys[number] & string : Keys & string>
 }

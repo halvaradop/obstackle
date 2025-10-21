@@ -29,16 +29,16 @@ import { getKeyFromPath } from "@/utils.js"
  * // Expected: false
  * has(user, "address.zipcode")
  */
-export const has = <Obj extends Record<string, any>>(obj: Obj, key: string): boolean => {
+export const has = <Obj extends Record<string, unknown>>(obj: Obj, key: string): boolean => {
     const [getKey, path] = getKeyFromPath(key)
-    if (!isObject(obj) || !getKey) {
+    if (!isObject(obj) || getKey === "") {
         return false
     }
     if (getKey in obj) {
         if (path === "") {
             return true
         } else {
-            return has(obj[getKey], path)
+            return has(obj[getKey] as Record<string, unknown>, path)
         }
     }
     return false

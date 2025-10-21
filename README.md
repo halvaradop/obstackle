@@ -1,4 +1,4 @@
-# @halvaradop/obstackle
+# `@halvaradop/obstackle`
 
 This library provides toolkits with utilities, functionalities, and methods for object manipulation. The code is written in `TypeScript`, offering autocomplete for the functionalities.
 

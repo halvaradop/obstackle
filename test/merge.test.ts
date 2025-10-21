@@ -530,12 +530,8 @@ describe("deepMerge", () => {
     test("checks the return type", () => {
         expectTypeOf(deepMerge(mockUser, mockStore)).toEqualTypeOf<DeepMerge<typeof mockUser, typeof mockStore, false, false>>()
         expectTypeOf(deepMerge(mockStore, mockUser)).toEqualTypeOf<DeepMerge<typeof mockStore, typeof mockUser, false, false>>()
-        expectTypeOf(deepMerge(mockUser, mockStore, true)).toEqualTypeOf<
-            DeepMerge<typeof mockUser, typeof mockStore, false, true>
-        >()
-        expectTypeOf(deepMerge(mockStore, mockUser, true)).toEqualTypeOf<
-            DeepMerge<typeof mockUser, typeof mockStore, false, true>
-        >()
+        expectTypeOf(deepMerge(mockUser, mockStore, true)).toEqualTypeOf<DeepMerge<typeof mockUser, typeof mockStore>>()
+        expectTypeOf(deepMerge(mockStore, mockUser, true)).toEqualTypeOf<DeepMerge<typeof mockUser, typeof mockStore>>()
         expectTypeOf(deepMerge(mockUser, mockStore, false, true)).toEqualTypeOf<
             DeepNonNullish<DeepMerge<typeof mockUser, typeof mockStore, false, false>>
         >()

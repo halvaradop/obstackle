@@ -1,26 +1,12 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-  "display": "Node 20",
-  "_version": "20.1.0",
+  "extends": "@halvaradop/tsconfig/tsconfig.base.json",
   "compilerOptions": {
-    "lib": ["ES2022", "DOM"],
-    "target": "ES2022",
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "moduleDetection": "force",
-    "esModuleInterop": true,
-    "isolatedModules": true,
-    "strict": true,
-    "allowJs": true,
-    "checkJs": true,
     "outDir": "dist",
-    "skipLibCheck": true,
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "test"]
+  "include": ["src", "test"],
+  "exclude": ["vitest.config.ts", "tsup.config.ts"]
 }

@@ -1,5 +1,6 @@
 import { describe, expect, expectTypeOf, test } from "vitest"
 import { get } from "@/get.js"
+import type { DeepKeys } from "@halvaradop/ts-utility-types"
 
 describe("get", () => {
     const testCasesWithoutDefault = [
@@ -106,7 +107,7 @@ describe("get", () => {
     describe("get with string keys", () => {
         testCasesWithoutDefault.forEach(({ description, input, key, expected }) => {
             test(description, () => {
-                expect(get(input, key as any)).toEqual(expected)
+                expect(get(input, key as DeepKeys<typeof input>)).toEqual(expected)
             })
         })
     })
@@ -114,7 +115,7 @@ describe("get", () => {
     describe("get with string keys and default values", () => {
         testCasesWithDefault.forEach(({ description, input, key, defaultValue, expected }) => {
             test(description, () => {
-                expect(get(input, key as any, defaultValue)).toEqual(expected)
+                expect(get(input, key as DeepKeys<typeof input>, defaultValue)).toEqual(expected)
             })
         })
     })
@@ -157,6 +158,7 @@ describe("get", () => {
         })
 
         test("should handle null types", () => {
+            /* eslint-disable @typescript-eslint/no-explicit-any */
             expectTypeOf(get(user, "keyThatDoesNotExist" as any)).toEqualTypeOf<any>()
             expectTypeOf(get(user, "keyThatDoesNotExist" as any, 12)).toEqualTypeOf<any>()
         })
