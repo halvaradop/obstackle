@@ -13,14 +13,14 @@ importers:
         version: 0.20.0
     devDependencies:
       '@halvaradop/eslint-config':
-        specifier: ^1.2.3
-        version: 1.2.3(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)
+        specifier: ^1.3.0
+        version: 1.3.0(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)
       '@halvaradop/prettier-config':
         specifier: ^1.2.1
         version: 1.2.1(prettier@3.5.3)
       '@halvaradop/tsconfig':
-        specifier: ^1.1.2
-        version: 1.1.2(typescript@5.8.3)
+        specifier: ^1.2.1
+        version: 1.2.1(typescript@5.8.3)
       '@halvaradop/tsup-config':
         specifier: ^1.1.1
         version: 1.1.1(tsup@8.5.0(postcss@8.5.5)(typescript@5.8.3))
@@ -264,8 +264,8 @@ packages:
     resolution: {integrity: sha512-Z5kJ+wU3oA7MMIqVR9tyZRtjYPr4OC004Q4Rw7pgOKUOKkJfZ3O24nz3WYfGRpMDNmcOi3TwQOmgm7B7Tpii0w==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@halvaradop/eslint-config@1.2.3':
-    resolution: {integrity: sha512-wqSZLsn9MO83F6UDbbW0/+pKNZQpQq5hMX7j87ytHHZaDk9tgwPoQ/D9W7yKNmndwV4MV9ZMCITHjnahVJ57wg==}
+  '@halvaradop/eslint-config@1.3.0':
+    resolution: {integrity: sha512-fJMeLPS68ZP4oARitlVwBfXvpPdJVxw0hI9QDktdH8kG1LtFqenN9iUvJFQ7l7l9r42bLn0vrrjeCWBAtcSGTQ==}
     peerDependencies:
       eslint: ^9.0.0
 
@@ -277,8 +277,8 @@ packages:
   '@halvaradop/ts-utility-types@0.20.0':
     resolution: {integrity: sha512-Q0LFrksy7yuma3SuJnftdu0m6nY3mCaXbiwcjRINhSMRyMRUKmNa2o/T5dMtVUtrP4XD/qL9TcnJXs30zFcE/w==}
 
-  '@halvaradop/tsconfig@1.1.2':
-    resolution: {integrity: sha512-OYXsi+mrtZiKtQWHlV1GxKI1KIdVdFlfmxZterRXQKz+9lRl+Enk5iKLCJuEkkIeTTrZKg/jOCWsEdU2PnE6IA==}
+  '@halvaradop/tsconfig@1.2.1':
+    resolution: {integrity: sha512-bmxXijTbgCxEy7nNCA4cIQfqPetPVA+4SVBKP0wC6e8o5EwTv3MLzu1UsHXPt2oSaRN1/SlaKYWYkZia8xNF4w==}
     peerDependencies:
       typescript: ^5.0.0
 
@@ -2130,7 +2130,7 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@halvaradop/eslint-config@1.2.3(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)':
+  '@halvaradop/eslint-config@1.3.0(@typescript-eslint/parser@8.44.0(eslint@9.36.0)(typescript@5.8.3))(eslint@9.36.0)(prettier@3.5.3)(turbo@2.5.6)(typescript@5.8.3)':
     dependencies:
       '@eslint/js': 9.36.0
       '@next/eslint-plugin-next': 15.5.3
@@ -2160,7 +2160,7 @@ snapshots:
 
   '@halvaradop/ts-utility-types@0.20.0': {}
 
-  '@halvaradop/tsconfig@1.1.2(typescript@5.8.3)':
+  '@halvaradop/tsconfig@1.2.1(typescript@5.8.3)':
     dependencies:
       typescript: 5.8.3
 
